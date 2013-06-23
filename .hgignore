@@ -1,0 +1,34 @@
+# use glob syntax
+syntax: glob
+
+# Ignore Visual Studio build files
+*.obj
+#*.exe
+*.pdb
+*.user
+*.aps
+*.pch
+*.vspscc
+*_i.c
+*_p.c
+*.ncb
+*.suo
+*.tlb
+*.tlh
+*.bak
+*.cache
+*.ilk
+*.log
+*.lib
+*.sbr
+*.scc
+*.vsmdi
+[Bb]in
+[Db]ebug*/
+[Tt]est[Rr]esults*/
+obj/
+[Rr]elease*/
+_Resharper*/
+[Tt]est[Rr]esult*
+[Bb]uild[Ll]og.*
+*.[Pp]ublish.xml
