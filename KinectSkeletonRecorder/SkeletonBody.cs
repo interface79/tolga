@@ -27,7 +27,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KinnectTest
+namespace KinectSkeleton
 {
     /// <summary>
     /// This is a single skeleton collection of 20 joints.

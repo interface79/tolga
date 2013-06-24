@@ -20,7 +20,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * 
  */ 
-namespace KinnectTest
+namespace KinectSkeleton
 {
     partial class MainForm
     {
@@ -52,7 +52,7 @@ namespace KinnectTest
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.skeletonView1 = new KinnectTest.SkeletonView();
+            this.skeletonView1 = new KinectSkeleton.SkeletonView();
             this.trackPlay = new System.Windows.Forms.TrackBar();
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,6 +73,7 @@ namespace KinnectTest
             this.skeletonView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.skeletonView1.BackColor = System.Drawing.Color.White;
             this.skeletonView1.Location = new System.Drawing.Point(0, 88);
             this.skeletonView1.Name = "skeletonView1";
             this.skeletonView1.Size = new System.Drawing.Size(586, 306);
@@ -114,21 +115,21 @@ namespace KinnectTest
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.newToolStripMenuItem.Text = "New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
             this.saveToolStripMenuItem.Text = "Save As";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -143,14 +144,14 @@ namespace KinnectTest
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // buttonPlay
             // 
             this.buttonPlay.Enabled = false;
-            this.buttonPlay.Image = global::KinnectTest.Properties.Resources.play32;
+            this.buttonPlay.Image = global::KinectSkeleton.Properties.Resources.play32;
             this.buttonPlay.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonPlay.Location = new System.Drawing.Point(106, 42);
             this.buttonPlay.Name = "buttonPlay";
@@ -164,7 +165,7 @@ namespace KinnectTest
             // 
             // buttonRecord
             // 
-            this.buttonRecord.Image = global::KinnectTest.Properties.Resources.record321;
+            this.buttonRecord.Image = global::KinectSkeleton.Properties.Resources.record321;
             this.buttonRecord.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonRecord.Location = new System.Drawing.Point(12, 42);
             this.buttonRecord.Name = "buttonRecord";

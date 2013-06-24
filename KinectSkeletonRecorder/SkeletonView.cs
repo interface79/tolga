@@ -30,20 +30,26 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.ComponentModel;
 
-namespace KinnectTest
+namespace KinectSkeleton
 {
     /// <summary>
     /// This is a user control that is designed to listen to the SkeletonKinectManager, and other SkeletonEvent providers
     /// </summary>
     public class SkeletonView : Control
     {
-   
+
+        #region Fields
 
         List<Color> _colors;
         Bitmap _backBuffer;
         private bool _busy;
         private Projector _projector = new Projector();
-        
+        private SkeletonSnapshot _currentSnapshot;
+
+        #endregion
+
+        #region Constructor
+
         /// <summary>
         /// Creates a new instance of the skeleton view control.  This control is a Windows Forms control that will draw the skeleton
         /// </summary>
@@ -58,21 +64,76 @@ namespace KinnectTest
             
         }
 
-        public void DrawSnapshot(SkeletonSnapshot snapshot)
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Refreshes the buffer by re-drawing the current snapshot onto the buffer image, using the current control's dimension
+        /// and the current projector settings.
+        /// </summary>
+        public void DrawContent()
         {
-            if (_busy)
-            {
-                return;
-            }
             _busy = true;
-            foreach (SkeletonBody body in snapshot.SkeletonBodies)
+            Bitmap drawBuffer = new Bitmap(Width, Height);
+
+            using (Graphics g = Graphics.FromImage(drawBuffer))
             {
-                DrawSkeletion(body);
+                using (Brush b = new SolidBrush(BackColor))
+                {
+                    g.FillRectangle(b, new Rectangle(0, 0, Width, Height));
+                }
+                if (_currentSnapshot != null)
+                {
+                    OnDrawSnapshot(g, _currentSnapshot);
+                }
+
             }
+
+            Bitmap oldBuffer = _backBuffer;
+            _backBuffer = drawBuffer;
+            if (oldBuffer != null)
+            {
+                oldBuffer.Dispose();
+            }
+
             _busy = false;
+            Invalidate();
+
+
         }
 
-        
+        /// <summary>
+        /// Updates the current snapshot and forces that snapshot to be drawn to the view.
+        /// </summary>
+        /// <param name="snapshot"></param>
+        public void DrawSnapshot(SkeletonSnapshot snapshot) {
+            _currentSnapshot = snapshot;
+            DrawContent();
+        }
+
+
+        #endregion
+
+        /// <summary>
+        /// The internal call that assumes a graphics object has been dimensioned.
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="snapshot"></param>
+        protected virtual void OnDrawSnapshot(Graphics g, SkeletonSnapshot snapshot)
+        {
+            foreach (SkeletonBody body in snapshot.SkeletonBodies)
+            {
+                OnDrawSkeletion(g, body);
+            }
+        }
+
+
+
+        /// <summary>
+        /// Prevent flicker.
+        /// </summary>
+        /// <param name="pevent"></param>
         protected override void OnPaintBackground(PaintEventArgs pevent)
         {
             //This is necessary in order to prevent flickering.
@@ -99,11 +160,9 @@ namespace KinnectTest
         /// <summary>
         /// Draw the joints as colored circles, and use black lines to connect them.
         /// </summary>
-        /// <param name="skeleton"></param>
-        public void DrawSkeletion(SkeletonBody skeleton) {
-            Bitmap drawBuffer = new Bitmap(Width, Height);
-            using (Graphics g = Graphics.FromImage(drawBuffer)) {
-                g.FillRectangle(Brushes.White, 0, 0, Width, Height);
+        /// <param name="skeleton">The skeleton to draw</param>
+        protected virtual void OnDrawSkeletion(Graphics g, SkeletonBody skeleton) {
+           
                 if (skeleton != null)
                 {
                     for (int i = 0; i < 3; i++)
@@ -139,14 +198,7 @@ namespace KinnectTest
                         DrawJoint(g, skeleton.Joints[i], _colors[i]);
                     }
                 }
-            }
             
-            Bitmap oldBuffer = _backBuffer;
-            _backBuffer = drawBuffer;
-            if (oldBuffer != null) {
-                oldBuffer.Dispose();
-            }
-            Invalidate();
            
         }
 
@@ -179,6 +231,9 @@ namespace KinnectTest
             
         }
 
+        /// <summary>
+        /// Initialize the component 
+        /// </summary>
         private void InitializeComponent()
         {
             this.SuspendLayout();
@@ -186,17 +241,22 @@ namespace KinnectTest
 
         }
 
+        /// <summary>
+        /// Force the control to redraw content to a new buffer if we resize the control.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnResize(EventArgs e)
         {
-            Bitmap drawBuffer = new Bitmap(Width, Height);
-            using (Graphics g = Graphics.FromImage(drawBuffer))
-            {
-                g.FillRectangle(Brushes.White, 0, 0, Width, Height);
-            }
-            _backBuffer = drawBuffer;
+            DrawContent();
+            
             base.OnResize(e);
         }
 
+
+        /// <summary>
+        /// Changing the mouse wheel alters the scale so you can "zoom in" and "zoom out" of the view.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             if (e.Delta > 0)
@@ -206,9 +266,15 @@ namespace KinnectTest
             else {
                 _projector.Scale = _projector.Scale * .8f;
             }
+            DrawContent();
             base.OnMouseWheel(e);
         }
 
+
+        /// <summary>
+        /// When the mouse moves over the control, the control gets focus so that you can zoom in and zoom out using the scroll wheel.
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnMouseMove(MouseEventArgs e)
         {
             this.Focus();

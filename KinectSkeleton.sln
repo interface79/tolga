@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2012 for Windows Desktop
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectSkeletonRecorder", "KinnectSkeltonRecorder\KinectSkeletonRecorder.csproj", "{48817DDD-F46F-4350-A3E2-C60E32339300}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KinectSkeletonRecorder", "KinectSkeletonRecorder\KinectSkeletonRecorder.csproj", "{48817DDD-F46F-4350-A3E2-C60E32339300}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

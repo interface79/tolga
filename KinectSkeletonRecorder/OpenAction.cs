@@ -22,12 +22,13 @@
  */
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace KinnectTest
+namespace KinectSkeleton
 {
     public class OpenAction
     {
@@ -43,6 +44,10 @@ namespace KinnectTest
             animation.Open(ofd.FileName);
             AnimationManager.Instance.CurrentAnimation = animation;
             AnimationManager.Instance.PlayPosition = 0;
+            if (string.IsNullOrEmpty(AnimationManager.Instance.CurrentAnimation.Name))
+            {
+                animation.Name = Path.GetFileNameWithoutExtension(ofd.FileName);
+            }
         }
     }
 }

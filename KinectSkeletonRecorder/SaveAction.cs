@@ -22,12 +22,13 @@
  */
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace KinnectTest
+namespace KinectSkeleton
 {
     public class SaveAction
     {
@@ -39,6 +40,7 @@ namespace KinnectTest
             if (animation == null || animation.Snapshots.Count == 0)
             {
                 MessageBox.Show("Please record an animation first.");
+                return;
             }
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "Animation Files (*.xml)|*.xml";
@@ -46,6 +48,9 @@ namespace KinnectTest
             if (r != System.Windows.Forms.DialogResult.OK)
             {
                 return;
+            }
+            if (string.IsNullOrEmpty(animation.Name)) {
+                animation.Name = Path.GetFileNameWithoutExtension(sfd.FileName);
             }
             animation.Save(sfd.FileName);
         }

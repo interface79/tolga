@@ -30,7 +30,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Research.Kinect.Nui;
-namespace KinnectTest
+namespace KinectSkeleton
 {
     /// <summary>
     /// This is the main form that hosts the editing and recording utilities.
@@ -127,14 +127,22 @@ namespace KinnectTest
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenAction.Open(this);
-            buttonPlay.Enabled = true;
-            trackPlay.Enabled = true;
-            trackPlay.Maximum = AnimationManager.Instance.SnapshotCount - 1;
+            if(AnimationManager.Instance.CurrentAnimation != null){
+                buttonPlay.Enabled = true;
+                trackPlay.Enabled = true;
+                trackPlay.Maximum = AnimationManager.Instance.SnapshotCount - 1;
+                Text = AnimationManager.Instance.CurrentAnimation.Name;
+            }
+            
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveAction.Save(this);
+            if (AnimationManager.Instance.CurrentAnimation != null) {
+                this.Text = AnimationManager.Instance.CurrentAnimation.Name;
+            }
+            
         }
 
         /// <summary>

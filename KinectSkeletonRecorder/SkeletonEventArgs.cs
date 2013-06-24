@@ -26,7 +26,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KinnectTest
+namespace KinectSkeleton
 {
     public class SkeletonEventArgs : EventArgs
     {

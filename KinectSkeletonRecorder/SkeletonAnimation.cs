@@ -29,7 +29,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace KinnectTest
+namespace KinectSkeleton
 {
     /// <summary>
     /// This class stores a list of snapshots.  Each snapshot can contain multiple skeleton bodies.  Each body will store 20 joint locations.

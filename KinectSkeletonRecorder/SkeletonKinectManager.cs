@@ -32,7 +32,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace KinnectTest
+namespace KinectSkeleton
 {
     /// <summary>
     /// This is a singleton manager to interact with the kinect sensor.  The Start and Stop methods activate and deactivate the

@@ -30,7 +30,7 @@ using Microsoft.Research.Kinect.Audio;
 using System.Drawing.Imaging;
 using System.Drawing;
 using System.Runtime.InteropServices;
-namespace KinnectTest
+namespace KinectSkeleton
 {
     /// <summary>
     /// This is not required for the skeleton recording, but can be used if image recording is desired instead.

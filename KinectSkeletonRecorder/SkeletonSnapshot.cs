@@ -28,7 +28,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace KinnectTest
+namespace KinectSkeleton
 {
     /// <summary>
     /// Since more than one skeleton can appear in a frame, this gets the distinct, non-null skeletons observed.
