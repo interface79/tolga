@@ -122,6 +122,7 @@ namespace KinectSkeleton
         /// <param name="snapshot"></param>
         protected virtual void OnDrawSnapshot(Graphics g, SkeletonSnapshot snapshot)
         {
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             foreach (SkeletonBody body in snapshot.SkeletonBodies)
             {
                 OnDrawSkeletion(g, body);
@@ -163,41 +164,41 @@ namespace KinectSkeleton
         /// <param name="skeleton">The skeleton to draw</param>
         protected virtual void OnDrawSkeletion(Graphics g, SkeletonBody skeleton) {
            
-                if (skeleton != null)
+            if (skeleton != null)
+            {
+                for (int i = 0; i < 3; i++)
                 {
-                    for (int i = 0; i < 3; i++)
-                    {
-                        ConnectJoints(g, skeleton.Joints[i], skeleton.Joints[i+1], Color.Black);
-                    }
-
-                    for (int i = 4; i < 7; i++)
-                    {
-                        ConnectJoints(g, skeleton.Joints[i], skeleton.Joints[i + 1], Color.Black);
-                    }
-
-                    for (int i = 8; i < 11; i++)
-                    {
-                        ConnectJoints(g, skeleton.Joints[i], skeleton.Joints[i + 1], Color.Black);
-                    }
-                    for (int i = 12; i < 15; i++)
-                    {
-                        ConnectJoints(g, skeleton.Joints[i], skeleton.Joints[i + 1], Color.Black);
-                    }
-                    for (int i = 16; i < 19; i++)
-                    {
-                        ConnectJoints(g, skeleton.Joints[i], skeleton.Joints[i + 1], Color.Black);
-                    }
-                    ConnectJoints(g, skeleton.Joints[2], skeleton.Joints[4], Color.Black);
-                    ConnectJoints(g, skeleton.Joints[2], skeleton.Joints[8], Color.Black);
-                    ConnectJoints(g, skeleton.Joints[0], skeleton.Joints[12], Color.Black);
-                    ConnectJoints(g, skeleton.Joints[0], skeleton.Joints[16], Color.Black);
-
-
-                    for (int i = 0; i < 20; i++)
-                    {
-                        DrawJoint(g, skeleton.Joints[i], _colors[i]);
-                    }
+                    ConnectJoints(g, skeleton.Joints[i], skeleton.Joints[i+1], Color.Black);
                 }
+
+                for (int i = 4; i < 7; i++)
+                {
+                    ConnectJoints(g, skeleton.Joints[i], skeleton.Joints[i + 1], Color.Black);
+                }
+
+                for (int i = 8; i < 11; i++)
+                {
+                    ConnectJoints(g, skeleton.Joints[i], skeleton.Joints[i + 1], Color.Black);
+                }
+                for (int i = 12; i < 15; i++)
+                {
+                    ConnectJoints(g, skeleton.Joints[i], skeleton.Joints[i + 1], Color.Black);
+                }
+                for (int i = 16; i < 19; i++)
+                {
+                    ConnectJoints(g, skeleton.Joints[i], skeleton.Joints[i + 1], Color.Black);
+                }
+                ConnectJoints(g, skeleton.Joints[2], skeleton.Joints[4], Color.Black);
+                ConnectJoints(g, skeleton.Joints[2], skeleton.Joints[8], Color.Black);
+                ConnectJoints(g, skeleton.Joints[0], skeleton.Joints[12], Color.Black);
+                ConnectJoints(g, skeleton.Joints[0], skeleton.Joints[16], Color.Black);
+
+
+                for (int i = 0; i < 20; i++)
+                {
+                    DrawJoint(g, skeleton.Joints[i], _colors[i]);
+                }
+            }
             
            
         }

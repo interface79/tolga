@@ -25,8 +25,8 @@
     <InstallUrl>http://kinectskeletonrecorder.codeplex.com/releases/clickonce/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -71,6 +71,9 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>KinectSkeletonRecorderSnk.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Movie.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Research.Kinect, Version=1.0.0.45, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System" />
@@ -92,10 +95,14 @@
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="AnimationManager.cs" />
+    <Compile Include="HSLColor.cs" />
     <Compile Include="IVector.cs" />
     <Compile Include="OpenAction.cs" />
     <Compile Include="Projector.cs" />
     <Compile Include="SaveAction.cs" />
+    <Compile Include="SelectableSlider.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="SkeletonEventArgs.cs" />
     <Compile Include="SkeletonKinectManager.cs" />
     <Compile Include="MainForm.cs">
@@ -182,6 +189,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Delete32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Movie.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

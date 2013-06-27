@@ -52,8 +52,6 @@ namespace KinectSkeleton
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.skeletonView1 = new KinectSkeleton.SkeletonView();
-            this.trackPlay = new System.Windows.Forms.TrackBar();
             this.menuMain = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,34 +60,13 @@ namespace KinectSkeleton
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
+            this.buttonDelete = new System.Windows.Forms.Button();
             this.buttonPlay = new System.Windows.Forms.Button();
             this.buttonRecord = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.trackPlay)).BeginInit();
+            this.playSlider = new KinectSkeleton.SelectableSlider();
+            this.skeletonView1 = new KinectSkeleton.SkeletonView();
             this.menuMain.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // skeletonView1
-            // 
-            this.skeletonView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.skeletonView1.BackColor = System.Drawing.Color.White;
-            this.skeletonView1.Location = new System.Drawing.Point(0, 88);
-            this.skeletonView1.Name = "skeletonView1";
-            this.skeletonView1.Size = new System.Drawing.Size(586, 306);
-            this.skeletonView1.TabIndex = 0;
-            this.skeletonView1.Text = "skeletonView1";
-            // 
-            // trackPlay
-            // 
-            this.trackPlay.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.trackPlay.Enabled = false;
-            this.trackPlay.Location = new System.Drawing.Point(187, 42);
-            this.trackPlay.Name = "trackPlay";
-            this.trackPlay.Size = new System.Drawing.Size(387, 45);
-            this.trackPlay.TabIndex = 4;
-            this.trackPlay.Scroll += new System.EventHandler(this.trackPlay_Scroll);
             // 
             // menuMain
             // 
@@ -148,6 +125,22 @@ namespace KinectSkeleton
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
+            // buttonDelete
+            // 
+            this.buttonDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonDelete.Enabled = false;
+            this.buttonDelete.Image = global::KinectSkeleton.Properties.Resources.Delete32;
+            this.buttonDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonDelete.Location = new System.Drawing.Point(444, 42);
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.Size = new System.Drawing.Size(119, 40);
+            this.buttonDelete.TabIndex = 7;
+            this.buttonDelete.Text = "Delete Selection";
+            this.buttonDelete.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.toolTipHelp.SetToolTip(this.buttonDelete, "This will delete the range selected on the slider.");
+            this.buttonDelete.UseVisualStyleBackColor = true;
+            this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
+            // 
             // buttonPlay
             // 
             this.buttonPlay.Enabled = false;
@@ -177,12 +170,49 @@ namespace KinectSkeleton
             this.buttonRecord.UseVisualStyleBackColor = true;
             this.buttonRecord.Click += new System.EventHandler(this.buttonRecord_Click);
             // 
+            // playSlider
+            // 
+            this.playSlider.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.playSlider.Enabled = false;
+            this.playSlider.Location = new System.Drawing.Point(196, 42);
+            this.playSlider.Maximum = 100;
+            this.playSlider.Minimum = 0;
+            this.playSlider.Name = "playSlider";
+            this.playSlider.Selected = false;
+            this.playSlider.SelectedColor = System.Drawing.Color.LightBlue;
+            this.playSlider.SelectionEnd = 0;
+            this.playSlider.SelectionStart = 0;
+            this.playSlider.Size = new System.Drawing.Size(233, 45);
+            this.playSlider.SliderColor = System.Drawing.Color.Blue;
+            this.playSlider.TabIndex = 6;
+            this.playSlider.Text = "selectableSlider1";
+            this.toolTipHelp.SetToolTip(this.playSlider, "Move the slider to see the animation frame, or select a region by drawing a recta" +
+        "ngle on the slider.");
+            this.playSlider.TrackColor = System.Drawing.Color.Green;
+            this.playSlider.Value = 50;
+            this.playSlider.ValueChanged += new System.EventHandler(this.playSlider_PlayPositionChanged);
+            this.playSlider.SelectionChanged += new System.EventHandler(this.playSlider_SelectionChanged);
+            // 
+            // skeletonView1
+            // 
+            this.skeletonView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.skeletonView1.BackColor = System.Drawing.Color.White;
+            this.skeletonView1.Location = new System.Drawing.Point(0, 93);
+            this.skeletonView1.Name = "skeletonView1";
+            this.skeletonView1.Size = new System.Drawing.Size(586, 301);
+            this.skeletonView1.TabIndex = 0;
+            this.skeletonView1.Text = "skeletonView1";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(586, 394);
-            this.Controls.Add(this.trackPlay);
+            this.Controls.Add(this.buttonDelete);
+            this.Controls.Add(this.playSlider);
             this.Controls.Add(this.buttonPlay);
             this.Controls.Add(this.buttonRecord);
             this.Controls.Add(this.skeletonView1);
@@ -190,7 +220,6 @@ namespace KinectSkeleton
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuMain;
             this.Name = "MainForm";
-            ((System.ComponentModel.ISupportInitialize)(this.trackPlay)).EndInit();
             this.menuMain.ResumeLayout(false);
             this.menuMain.PerformLayout();
             this.ResumeLayout(false);
@@ -203,7 +232,6 @@ namespace KinectSkeleton
         private SkeletonView skeletonView1;
         private System.Windows.Forms.Button buttonRecord;
         private System.Windows.Forms.Button buttonPlay;
-        private System.Windows.Forms.TrackBar trackPlay;
         private System.Windows.Forms.MenuStrip menuMain;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
@@ -212,6 +240,8 @@ namespace KinectSkeleton
         private System.Windows.Forms.ToolTip toolTipHelp;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private SelectableSlider playSlider;
+        private System.Windows.Forms.Button buttonDelete;
 
 
 

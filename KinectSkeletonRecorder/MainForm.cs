@@ -55,7 +55,7 @@ namespace KinectSkeleton
         void Animation_SkeletonReady(object sender, SkeletonEventArgs e)
         {
             skeletonView1.DrawSnapshot(e.Snapshot);
-            trackPlay.Value = AnimationManager.Instance.PlayPosition;
+            playSlider.Value = AnimationManager.Instance.PlayPosition;
         }
 
         
@@ -85,9 +85,9 @@ namespace KinectSkeleton
                 toolTipHelp.SetToolTip(buttonRecord, "Press to start recording skeleton snapshots from the kinect.");
                 SkeletonKinectManager.Instance.Stop(); 
                 buttonPlay.Enabled = true;
-                trackPlay.Enabled = true;
-                trackPlay.Maximum = AnimationManager.Instance.CurrentAnimation.Snapshots.Count - 1;
-                trackPlay.Minimum = 0;
+                playSlider.Enabled = true;
+                playSlider.Maximum = AnimationManager.Instance.CurrentAnimation.Snapshots.Count - 1;
+                playSlider.Minimum = 0;
                 recording = false;
             }
             
@@ -112,16 +112,11 @@ namespace KinectSkeleton
        
        
 
-        private void trackPlay_Scroll(object sender, EventArgs e)
-        {
-            AnimationManager.Instance.PlayPosition = trackPlay.Value;
-        }
-
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AnimationManager.Instance.CurrentAnimation = new SkeletonAnimation();
             buttonPlay.Enabled = false;
-            trackPlay.Enabled = false;
+            playSlider.Enabled = false;
         }
 
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -129,8 +124,9 @@ namespace KinectSkeleton
             OpenAction.Open(this);
             if(AnimationManager.Instance.CurrentAnimation != null){
                 buttonPlay.Enabled = true;
-                trackPlay.Enabled = true;
-                trackPlay.Maximum = AnimationManager.Instance.SnapshotCount - 1;
+                playSlider.Enabled = true;
+                playSlider.Maximum = AnimationManager.Instance.SnapshotCount - 1;
+                playSlider.Value = 0;
                 Text = AnimationManager.Instance.CurrentAnimation.Name;
             }
             
@@ -154,6 +150,35 @@ namespace KinectSkeleton
         {
             AboutDialog dialog = new AboutDialog();
             dialog.ShowDialog(this);
+        }
+
+        private void playSlider_PlayPositionChanged(object sender, EventArgs e)
+        {
+            AnimationManager.Instance.PlayPosition = playSlider.Value;
+        }
+
+        private void playSlider_SelectionChanged(object sender, EventArgs e)
+        {
+            if (playSlider.Selected)
+            {
+                buttonDelete.Enabled = true;
+            }
+            else {
+                buttonDelete.Enabled = false;
+            }
+        }
+
+        private void buttonDelete_Click(object sender, EventArgs e)
+        {
+            int start = playSlider.SelectionStart;
+            int end = playSlider.SelectionEnd;
+            AnimationManager.Instance.CurrentAnimation.Snapshots.RemoveRange(start, end - start);
+            playSlider.Selected = false;
+            playSlider.Maximum = AnimationManager.Instance.CurrentAnimation.Snapshots.Count;
+            if (playSlider.Value > playSlider.Maximum) {
+                playSlider.Value = playSlider.Maximum;
+            }
+
         }
 
        
