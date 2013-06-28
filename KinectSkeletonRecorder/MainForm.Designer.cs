@@ -66,6 +66,7 @@ namespace KinectSkeleton
             this.buttonRecord = new System.Windows.Forms.Button();
             this.playSlider = new KinectSkeleton.SelectableSlider();
             this.skeletonView1 = new KinectSkeleton.SkeletonView();
+            this.sliderContextMenu1 = new KinectSkeleton.SliderContextMenu();
             this.menuMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -215,6 +216,12 @@ namespace KinectSkeleton
             this.skeletonView1.TabIndex = 0;
             this.skeletonView1.Text = "skeletonView1";
             // 
+            // sliderContextMenu1
+            // 
+            this.sliderContextMenu1.Name = "sliderContextMenu1";
+            this.sliderContextMenu1.ParentSlider = this.playSlider;
+            this.sliderContextMenu1.Size = new System.Drawing.Size(108, 70);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -252,6 +259,7 @@ namespace KinectSkeleton
         private SelectableSlider playSlider;
         private System.Windows.Forms.Button buttonDelete;
         private System.Windows.Forms.ToolStripMenuItem documentationToolStripMenuItem;
+        private SliderContextMenu sliderContextMenu1;
 
 
 

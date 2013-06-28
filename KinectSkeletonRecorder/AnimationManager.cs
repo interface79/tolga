@@ -110,7 +110,28 @@ namespace KinectSkeleton
 
         #endregion
 
+        #region Methods
 
+        /// <summary>
+        /// Gets a copy of the specified range as a new animation
+        /// </summary>
+        public void CopyToClipboard(int index, int count) {
+            ClipboardAnimation = new SkeletonAnimation();
+            ClipboardAnimation.Snapshots.AddRange(CurrentAnimation.Snapshots.GetRange(index, count));
+        }
+
+        public void PasteFromClipboard(int index) {
+            if (ClipboardAnimation != null && ClipboardAnimation.Snapshots.Count > 0)
+            {
+                CurrentAnimation.Snapshots.InsertRange(index, ClipboardAnimation.Snapshots);
+            }
+            else {
+                MessageBox.Show("No data has been copied.  First select a region by dragging a rectangle on the slider and then copy the selection using the context menu.");
+            }
+            
+        }
+
+        #endregion
 
 
         #region Properties
@@ -119,6 +140,11 @@ namespace KinectSkeleton
         /// Gets or sets the current animation that the controls should be working with.
         /// </summary>
         public SkeletonAnimation CurrentAnimation { get; set; }
+
+        /// <summary>
+        /// Gets or sets the "clipboard" which is a Skeleton Animation.
+        /// </summary>
+        public SkeletonAnimation ClipboardAnimation { get; set; }
 
 
         /// <summary>

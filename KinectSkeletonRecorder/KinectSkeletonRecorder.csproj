@@ -127,6 +127,9 @@
     <Compile Include="SkeletonView.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="SliderContextMenu.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Vector.cs" />
     <EmbeddedResource Include="AboutDialog.resx">
       <DependentUpon>AboutDialog.cs</DependentUpon>
@@ -192,6 +195,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Movie.ico" />
+    <None Include="Resources\Paste16.png" />
+    <None Include="Resources\Delete16.png" />
+    <None Include="Resources\Copy16.png" />
     <None Include="Resources\Skeleton.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
