@@ -33,6 +33,15 @@ namespace KinectSkeleton
     public class AnimationManager
     {
 
+        #region Fields
+
+        /// <summary>
+        /// Application Manager
+        /// </summary>
+        ApplicationManager _app;
+
+        #endregion
+
         #region events
 
         /// <summary>
@@ -73,34 +82,15 @@ namespace KinectSkeleton
         Timer _playTimer = new Timer();
         private int _playPosition;
 
-        #region Singleton
-
-        /// <summary>
-        /// the private static instance that is part of the Singleton pattern.
-        /// </summary>
-        private static AnimationManager _instance;
-
-        /// <summary>
-        /// Gets an instance for this manager.
-        /// </summary>
-        public static AnimationManager Instance
-        {
-            get
-            {
-                if (_instance == null) {
-                    _instance = new AnimationManager();
-                }
-                return _instance;
-            }
-        }
-
         /// <summary>
         /// Part of the singleton pattern, this private constructor is only called by the Instance getter.
         /// </summary>
-        private AnimationManager() {
+        public AnimationManager(ApplicationManager app) {
+            _app = app;
             _playTimer.Interval = 30;
             _playTimer.Tick += PlayTimer_Tick;
             SkeletonKinectManager.Instance.SkeletonReady += Instance_SkeletonReady;
+            ClipboardAnimation = new SkeletonAnimation();
         }
 
         void Instance_SkeletonReady(object sender, SkeletonEventArgs e)
@@ -108,9 +98,28 @@ namespace KinectSkeleton
             CurrentAnimation.Snapshots.Add(e.Snapshot);
         }
 
-        #endregion
+
 
         #region Methods
+
+        /// <summary>
+        /// The enabled state of the "Paste" menu items depend on whether or not the clipboard has content.
+        /// </summary>
+        public void UpdatePasteEnabled() {
+            if (_app != null) {
+                bool pasteEnabled =  (ClipboardAnimation != null && ClipboardAnimation.Snapshots != null &&
+                        ClipboardAnimation.Snapshots.Count > 0);
+                ToolStripMenuItem menuPaste = _app.GetMenu("menuPaste");
+
+                if (menuPaste != null) {
+                    menuPaste.Enabled = pasteEnabled;
+                }
+                if (_app.SliderContextMenu != null) {
+                    _app.SliderContextMenu.Paste.Enabled = pasteEnabled;
+                }
+            }
+        
+        }
 
         /// <summary>
         /// Gets a copy of the specified range as a new animation
@@ -193,6 +202,13 @@ namespace KinectSkeleton
             if (_playPosition > 0 && _playPosition < SnapshotCount)
             {
                 CurrentSnapshot = CurrentAnimation.Snapshots[_playPosition];
+                if (_app.Viewer != null)
+                {
+                    _app.Viewer.DrawSnapshot(CurrentSnapshot);
+                }
+                if (_app.Slider != null) {
+                    _app.Slider.Value = _app.AnimationManager.PlayPosition;
+                }
                 OnSkeletonReady(this, new SkeletonEventArgs(CurrentSnapshot));
 
             }
@@ -201,6 +217,7 @@ namespace KinectSkeleton
                 _playTimer.Stop();
                 _playPosition = 0;
                 Playing = false;
+                ProcessPlay.TogglePlay(_app);
                 OnPlayEnded(this, EventArgs.Empty);
             }
         }

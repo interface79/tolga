@@ -63,9 +63,29 @@ namespace KinectSkeleton.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap About16 {
+            get {
+                object obj = ResourceManager.GetObject("About16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Copy16 {
             get {
                 object obj = ResourceManager.GetObject("Copy16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Cut16 {
+            get {
+                object obj = ResourceManager.GetObject("Cut16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -86,6 +106,36 @@ namespace KinectSkeleton.Properties {
         internal static System.Drawing.Bitmap Delete32 {
             get {
                 object obj = ResourceManager.GetObject("Delete32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Help16 {
+            get {
+                object obj = ResourceManager.GetObject("Help16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap New16 {
+            get {
+                object obj = ResourceManager.GetObject("New16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Open16 {
+            get {
+                object obj = ResourceManager.GetObject("Open16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -133,6 +183,36 @@ namespace KinectSkeleton.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Redo16 {
+            get {
+                object obj = ResourceManager.GetObject("Redo16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Save16 {
+            get {
+                object obj = ResourceManager.GetObject("Save16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SaveAs16 {
+            get {
+                object obj = ResourceManager.GetObject("SaveAs16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Skeleton {
             get {
                 object obj = ResourceManager.GetObject("Skeleton", resourceCulture);
@@ -146,6 +226,16 @@ namespace KinectSkeleton.Properties {
         internal static System.Drawing.Bitmap stop32 {
             get {
                 object obj = ResourceManager.GetObject("stop32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Undo16 {
+            get {
+                object obj = ResourceManager.GetObject("Undo16", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

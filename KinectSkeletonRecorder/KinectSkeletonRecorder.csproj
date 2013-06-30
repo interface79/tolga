@@ -94,17 +94,36 @@
     <Compile Include="AboutDialog.Designer.cs">
       <DependentUpon>AboutDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Action.cs" />
+    <Compile Include="ActionCopy.cs" />
+    <Compile Include="ActionCut.cs" />
+    <Compile Include="ActionDelete.cs" />
+    <Compile Include="ActionManager.cs" />
+    <Compile Include="ApplicationManager.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ActionPaste.cs" />
     <Compile Include="AnimationManager.cs" />
     <Compile Include="HSLColor.cs" />
     <Compile Include="IVector.cs" />
-    <Compile Include="OpenAction.cs" />
+    <Compile Include="Messages.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ProcessAbout.cs" />
+    <Compile Include="ProcessNew.cs" />
+    <Compile Include="ProcessOpen.cs" />
+    <Compile Include="ProcessPlay.cs" />
+    <Compile Include="ProcessRecord.cs" />
     <Compile Include="Projector.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="SaveAction.cs" />
+    <Compile Include="ProcessSave.cs" />
+    <Compile Include="RecentFiles.cs" />
     <Compile Include="SelectableSlider.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -137,6 +156,10 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Messages.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Messages.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -144,6 +167,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SkeletonView.resx">
       <DependentUpon>SkeletonView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SliderContextMenu.resx">
+      <DependentUpon>SliderContextMenu.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="KinectSkeletonRecorderSnk.pfx" />
     <None Include="KinectSkeletonRecorder_TemporaryKey.pfx" />
@@ -195,6 +221,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Movie.ico" />
+    <None Include="Resources\Help16.png" />
+    <None Include="Resources\About16.png" />
+    <None Include="Resources\Open16.png" />
+    <None Include="Resources\New16.png" />
+    <None Include="Resources\SaveAs16.png" />
+    <None Include="Resources\Save16.png" />
+    <None Include="Resources\Undo16.png" />
+    <None Include="Resources\Redo16.png" />
+    <None Include="Resources\Cut16.png" />
     <None Include="Resources\Paste16.png" />
     <None Include="Resources\Delete16.png" />
     <None Include="Resources\Copy16.png" />

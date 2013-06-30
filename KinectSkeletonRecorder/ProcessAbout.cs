@@ -19,40 +19,31 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * 
+ * The initial version of this file was created on 6/29/2013 5:47:56 PM
+ * 
  */
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace KinectSkeleton
 {
-    public class SaveAction
+    /// <summary>
+    /// The ProcessAbout class
+    /// </summary>
+    public class ProcessAbout
     {
-
-
-        public static void Save(IWin32Window parentWindow)
-        {
-            SkeletonAnimation animation = AnimationManager.Instance.CurrentAnimation;
-            if (animation == null || animation.Snapshots.Count == 0)
-            {
-                MessageBox.Show("Please record an animation first.");
-                return;
-            }
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "Animation Files (*.xml)|*.xml";
-            DialogResult r = sfd.ShowDialog(parentWindow);
-            if (r != System.Windows.Forms.DialogResult.OK)
-            {
-                return;
-            }
-            if (string.IsNullOrEmpty(animation.Name)) {
-                animation.Name = Path.GetFileNameWithoutExtension(sfd.FileName);
-            }
-            animation.Save(sfd.FileName);
+        /// <summary>
+        /// Launches the About dialog.
+        /// </summary>
+        /// <param name="app"></param>
+        public static void About(ApplicationManager app) {
+            AboutDialog dialog = new AboutDialog();
+            dialog.ShowDialog(app.MainForm);
         }
+
+
     }
 }

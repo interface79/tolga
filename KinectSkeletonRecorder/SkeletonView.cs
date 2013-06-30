@@ -113,7 +113,6 @@ namespace KinectSkeleton
         }
 
 
-        #endregion
 
         /// <summary>
         /// The internal call that assumes a graphics object has been dimensioned.
@@ -281,8 +280,22 @@ namespace KinectSkeleton
             this.Focus();
             base.OnMouseMove(e);
         }
-        
 
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the optional application manager for this viewer control.  If this is set, then
+        /// it enables this tool access to the application for coordinating "linked" actions. 
+        /// </summary>
+        [Description(" Gets or sets the optional application manager for this viewer control.  If this is set, then "+
+            "it enables this tool access to the application for coordinating linked behavior"),
+        Category("Behavior")]
+        public ApplicationManager App { get; set; }
+
+        #endregion
 
     }
 }

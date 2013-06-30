@@ -26,6 +26,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -36,6 +37,9 @@ namespace KinectSkeleton
     /// </summary>
     public class SkeletonAnimation
     {
+
+        private List<SkeletonSnapshot> _snapshots;
+
         /// <summary>
         /// For users not familiar with the kinect nodes, this will serialize the joint definitions
         /// at the beginning of evrey skeleton animation file for reference.
@@ -69,13 +73,27 @@ namespace KinectSkeleton
             Snapshots = new List<SkeletonSnapshot>();
         }
 
+        
+
         /// <summary>
         /// This list of snapshots or skeletal frames will serialize in xml as an array, which means that 
         /// it simply lists the skeletonSnapshot sub-elements within the "Shapshots" element.
         /// </summary>
         [XmlArray("Snapshots")]
         [XmlArrayItem("SkeletonSnapshot")]
-        public List<SkeletonSnapshot> Snapshots { get; set; }
+        public List<SkeletonSnapshot> Snapshots
+        {
+            get;
+            set;
+        }
+
+       
+
+        /// <summary>
+        /// The filename is set by the file this is loaded from and should not be serialized into the file itself.
+        /// </summary>
+        [XmlIgnore]
+        public string Filename { get; set; }
 
         /// <summary>
         /// The string name of this animation.  This is not the same as the fileaname and is simply used for a reference.

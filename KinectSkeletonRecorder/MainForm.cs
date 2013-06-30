@@ -38,14 +38,13 @@ namespace KinectSkeleton
     /// </summary>
     public partial class MainForm : Form
     {
-        private bool recording;
+   
 
         public MainForm()
         {
             InitializeComponent();
-            AnimationManager.Instance.PlayEnded += Animation_PlayEnded;
-            AnimationManager.Instance.SkeletonReady += Animation_SkeletonReady;
             SkeletonKinectManager.Instance.SkeletonReady += Instance_SkeletonReady;
+            app.RecentFiles.Load();
         }
 
         void Instance_SkeletonReady(object sender, SkeletonEventArgs e)
@@ -53,93 +52,31 @@ namespace KinectSkeleton
             skeletonView1.DrawSnapshot(e.Snapshot);
         }
 
-        void Animation_SkeletonReady(object sender, SkeletonEventArgs e)
-        {
-            skeletonView1.DrawSnapshot(e.Snapshot);
-            playSlider.Value = AnimationManager.Instance.PlayPosition;
-        }
-
-        
-
-        void Animation_PlayEnded(object sender, EventArgs e)
-        {
-            buttonPlay.Image = Properties.Resources.play32;
-            buttonPlay.Text = "Play";
-            toolTipHelp.SetToolTip(buttonPlay, "Press to begin playing back the skeleton frames one frame at a time.");
-        }
 
         private void buttonRecord_Click(object sender, EventArgs e)
         {
-            if (!recording)
-            {
-                AnimationManager.Instance.CurrentAnimation = new SkeletonAnimation();
-                SkeletonKinectManager.Instance.Start();
-                
-                buttonRecord.Image = Properties.Resources.stop32;
-                buttonRecord.Text = "Stop";
-                toolTipHelp.SetToolTip(buttonRecord, "Press to stop recording skeleton snapshots from the kinect.");
-                recording = true;
-            }
-            else {
-                buttonRecord.Image = Properties.Resources.record321;
-                buttonRecord.Text = "Record";
-                toolTipHelp.SetToolTip(buttonRecord, "Press to start recording skeleton snapshots from the kinect.");
-                SkeletonKinectManager.Instance.Stop(); 
-                buttonPlay.Enabled = true;
-                playSlider.Enabled = true;
-                playSlider.Maximum = AnimationManager.Instance.CurrentAnimation.Snapshots.Count - 1;
-                playSlider.Minimum = 0;
-                recording = false;
-            }
-            
+            ProcessRecord.ToggleRecord(app);
         }
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            if (!AnimationManager.Instance.Playing)
-            {
-                AnimationManager.Instance.Start();
-                buttonPlay.Image = Properties.Resources.stop32;
-                buttonPlay.Text = "Stop";
-                toolTipHelp.SetToolTip(buttonPlay, "Press to stop playing back the skeleton frames.");
-            }
-            else {
-                AnimationManager.Instance.Stop();
-                buttonPlay.Image = Properties.Resources.play32;
-                buttonPlay.Text = "Play";
-                toolTipHelp.SetToolTip(buttonPlay, "Press to begin playing back the skeleton frames one frame at a time.");
-            }
+            ProcessPlay.TogglePlay(app);
         }
-       
        
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AnimationManager.Instance.CurrentAnimation = new SkeletonAnimation();
-            buttonPlay.Enabled = false;
-            playSlider.Enabled = false;
+            ProcessNew.New(app);
         }
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        private void menuOpen_Click(object sender, EventArgs e)
         {
-            OpenAction.Open(this);
-            if(AnimationManager.Instance.CurrentAnimation != null){
-                buttonPlay.Enabled = true;
-                playSlider.Enabled = true;
-                playSlider.Maximum = AnimationManager.Instance.SnapshotCount - 1;
-                playSlider.Value = 0;
-                Text = AnimationManager.Instance.CurrentAnimation.Name;
-            }
-            
+            ProcessOpen.Open(this.app);
         }
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void menuSaveAs_Click(object sender, EventArgs e)
         {
-            SaveAction.Save(this);
-            if (AnimationManager.Instance.CurrentAnimation != null) {
-                this.Text = AnimationManager.Instance.CurrentAnimation.Name;
-            }
-            
+            ProcessSave.Save(this.app);
         }
 
         /// <summary>
@@ -149,42 +86,43 @@ namespace KinectSkeleton
         /// <param name="e"></param>
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AboutDialog dialog = new AboutDialog();
-            dialog.ShowDialog(this);
+            ProcessAbout.About(app);
         }
 
         private void playSlider_PlayPositionChanged(object sender, EventArgs e)
         {
-            AnimationManager.Instance.PlayPosition = playSlider.Value;
+            app.AnimationManager.PlayPosition = playSlider.Value;
         }
 
         private void playSlider_SelectionChanged(object sender, EventArgs e)
         {
             if (playSlider.Selected)
             {
-                buttonDelete.Enabled = true;
+                menuCut.Enabled = true;
+                
+                menuDelete.Enabled = true;
             }
             else {
-                buttonDelete.Enabled = false;
+                menuCut.Enabled = false;
+                menuDelete.Enabled = false;
             }
         }
 
-        private void buttonDelete_Click(object sender, EventArgs e)
-        {
-            int start = playSlider.SelectionStart;
-            int end = playSlider.SelectionEnd;
-            AnimationManager.Instance.CurrentAnimation.Snapshots.RemoveRange(start, end - start);
-            playSlider.Selected = false;
-            playSlider.Maximum = AnimationManager.Instance.CurrentAnimation.Snapshots.Count;
-            if (playSlider.Value > playSlider.Maximum) {
-                playSlider.Value = playSlider.Maximum;
-            }
-
-        }
-
-        private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
+       
+        private void menuDocumentation_Click(object sender, EventArgs e)
         {
             Process.Start("https://kinectskeletonrecorder.codeplex.com/documentation");
+        }
+
+        private void menuCopy_Click(object sender, EventArgs e)
+        {
+            ActionCopy copy = new ActionCopy(app);
+            copy.Run();
+        }
+
+        private void menuFile_Click(object sender, EventArgs e)
+        {
+
         }
 
       

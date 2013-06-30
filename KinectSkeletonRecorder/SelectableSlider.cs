@@ -35,174 +35,148 @@ namespace KinectSkeleton
     [DefaultEvent("ValueChanged")]
     public class SelectableSlider : Control
     {
-        private bool _selected;
+        #region Fields
+
+        /// <summary>
+        /// The Bitmap that stores a cached version of the graphics for paint methods to quickly draw from.
+        /// </summary>
         private Bitmap _backbuffer;
+
+        /// <summary>
+        /// A boolean that is true if the handle on the slider is being dragged.
+        /// </summary>
         private bool _draggingSlider;
+        
+        /// <summary>
+        /// The maximum value that corresponds to the right side of the slider.
+        /// </summary>
+        private int _maximum;
+
+        /// <summary>
+        /// The minimum value that corresponds to the left side of the slider.
+        /// </summary>
+        /// 
+        private int _minimum;
+        
+        /// <summary>
+        /// A boolean indicating whether a region of the slider has been selected.
+        /// </summary>
+        private bool _selected;
+
+        /// <summary>
+        /// The color of the selected part of the track line drawn down the middle of the control.
+        /// </summary>
+        private Color _selectedColor;
+
+        /// <summary>
+        /// True if a rectangle is dragging a selection 
+        /// </summary>
         private bool _selecting;
+
+        /// <summary>
+        /// An integer value that represents the end of the selected region.
+        /// </summary>
+        private int _selectionEnd;
+
+        /// <summary>
+        /// The X coordinate on the control in client coordinates where dragging of a selection rectangle began.
+        /// </summary>
         private int _selectionStartX;
+
+        /// <summary>
+        /// The integer value that corresponds with the selection start X location.
+        /// </summary>
+        private int _selectionStart;
+
+        /// <summary>
+        /// The color of the track slider control that indicates the current play position.
+        /// </summary>
+        private Color _sliderColor;
+
+        /// <summary>
+        /// The color of the track line drawn down the middle of the control.
+        /// </summary>
+        private Color _trackColor;
+
+        /// <summary>
+        /// The value that represents the current play position of the slider.
+        /// </summary>
+        private int _value;
+
+
+        #endregion
+
+        #region Events
+
         /// <summary>
         /// Occurs any time the value is actively changing by the user dragging the value.
         /// </summary>
         public event EventHandler ValueChanged;
+        
+        /// <summary>
+        /// Raises the valueChanged event
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected virtual void OnValueChanged(object sender, EventArgs e) {
             if (ValueChanged != null) {
                 ValueChanged(sender, e);
             }
         }
 
+        /// <summary>
+        /// Occurs when the selection changes location or is lost as a result of the user's actions.
+        /// </summary>
         public event EventHandler SelectionChanged;
+
+        /// <summary>
+        /// Raises the SelectionChanged event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected virtual void OnSelectionChanged(object sender, EventArgs e) {
+            if (App != null) {
+                ToolStripMenuItem cut = App.GetMenu("menuCut");
+                if (cut != null) {
+                    cut.Enabled = Selected;
+                }
+                ToolStripMenuItem del = App.GetMenu("menuDelete");
+                if (del != null)
+                {
+                    del.Enabled = Selected;
+                }
+                ToolStripMenuItem copy = App.GetMenu("menuCopy");
+                if (copy != null)
+                {
+                    copy.Enabled = Selected;
+                }
+                if (App.SliderContextMenu != null) {
+                    App.SliderContextMenu.Copy.Enabled = Selected;
+                    App.SliderContextMenu.Delete.Enabled = Selected;
+                    App.SliderContextMenu.Cut.Enabled = Selected;
+                }
+            }
+            
             if (SelectionChanged != null) {
                 SelectionChanged(sender, e);
             }
         }
 
-       
+        #endregion
+
 
         /// <summary>
         /// Creates a new instance of the SelectableSlider class.
         /// </summary>
         public SelectableSlider() {
             Maximum = 100;
-            Value = 50;
-            this.Selected = true;
-            SelectionStart = 25;
-            SelectionEnd = 75;
+            Value = 0;
+            this.Selected = false;
             TrackColor = Color.Green;
             SliderColor = Color.Blue;
         }
 
-        /// <summary>
-        /// Gets or sets whether a region of the slider has been selected.
-        /// </summary>
-        [Description(" Gets or sets whether a region of the slider has been selected.")]
-        [Category("Behavior")]
-        public bool Selected
-        {
-            get { return _selected; }
-            set { _selected = value;
-            DrawContent();
-            }
-        }
-
-        
-         private int _minimum;
-
-        /// <summary>
-        /// Gets or sets the minimum value that corresponds to the left side of the slider.
-        /// </summary>
-        [Description("Gets or sets the minimum value that corresponds to the left side of the slider.")]
-        [Category("Behavior")]
-        public int Minimum{
-            get { return _minimum; }
-            set { _minimum = value;
-            DrawContent();
-            }
-        }
-
-        private int _maximum;
        
-        /// <summary>
-        /// Gets or sets the maximum value that corresponds to the right side of the slider.
-        /// </summary>
-        [Description("Gets or sets the maximum value that corresponds to the right side of the slider.")]
-        [Category("Behavior")]
-        public int Maximum
-        {
-            get { return _maximum; }
-            set { _maximum = value;
-            DrawContent();
-            }
-        }
-
-        private int _value;
-        /// <summary>
-        /// Gets or sets the value that represents the current play position of the slider.
-        /// </summary>
-        [Description("Gets or sets the value that represents the current play position of the slider.")]
-        [Category("Behavior")]
-        public int Value {
-            get { return _value; }
-            set {
-                _value = value;
-                DrawContent();
-            }
-        }
-
-        private int _selectionStart;
-
-        /// <summary>
-        /// Gets or sets an integer value that represents the start of the selected region.
-        /// </summary>
-        [Description("Gets or sets an integer value that represents the start of the selected region.")]
-        [Category("Behavior")]
-        public int SelectionStart {
-            get { return _selectionStart; }
-            set { _selectionStart = value;
-            DrawContent();
-            }
-        }
-
-        private int _selectionEnd;
-
-        /// <summary>
-        /// Gets or sets an integer value that represents the end of the selected region.
-        /// </summary>
-        [Description("Gets or sets an integer value that represents the end of the selected region.")]
-        [Category("Behavior")]
-        public int SelectionEnd {
-            get { return _selectionEnd; }
-            set { _selectionEnd = value;
-            DrawContent();
-            }
-        }
-
-        private Color _trackColor;
-        /// <summary>
-        /// Gets or sets the color of the track line drawn down the middle of the control.
-        /// </summary>
-        [Description("Gets or sets the color of the track line drawn down the middle of the control.")]
-        [Category("Appearance")]
-        public Color TrackColor {
-            get { return _trackColor; }
-            set {
-                _trackColor = value;
-                DrawContent();
-            }
-
-        }
-
-        private Color _selectedColor;
-        /// <summary>
-        /// Gets or sets the color of the selected part of the track line drawn down the middle of the control.
-        /// </summary>
-        [Description("Gets or sets the color of the selected part of the track line drawn down the middle of the control.")]
-        [Category("Appearance")]
-        public Color SelectedColor
-        {
-            get { return _selectedColor; }
-            set
-            {
-                _selectedColor = value;
-                DrawContent();
-            }
-
-        }
-
-        private Color _sliderColor;
-        /// <summary>
-        /// Gets or sets the color of the track slider control that indicates the current play position.
-        /// </summary>
-        [Description("Gets or sets the color of the track line drawn down the middle of the control.")]
-        [Category("Appearance")]
-        public Color SliderColor {
-            get { return _sliderColor; }
-            set
-            {
-                _sliderColor = value;
-                DrawContent();
-            }
-        }
 
         /// <summary>
         /// Clears the current selection so that the control will draw as if not selected.
@@ -213,6 +187,10 @@ namespace KinectSkeleton
             SelectionStart = -1;
         }
 
+       
+
+        #region Drawing
+
         protected override void OnPaintBackground(PaintEventArgs pevent)
         {
             // Prevent flicker
@@ -221,7 +199,8 @@ namespace KinectSkeleton
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (_backbuffer == null) {
+            if (_backbuffer == null)
+            {
                 DrawContent();
             }
             Rectangle rect = e.ClipRectangle;
@@ -234,11 +213,12 @@ namespace KinectSkeleton
             if (Width <= 0 || Height <= 0) {
                 return;
             }
-            Bitmap bmp = new Bitmap(Width, Height);
+            Bitmap bmp = new Bitmap(Width+2, Height+2);
             using (Graphics g = Graphics.FromImage(bmp)) {
+                g.TranslateTransform(-1, -1);
                 g.SmoothingMode = SmoothingMode.AntiAlias;
                 using (Brush b = new SolidBrush(BackColor)) {
-                    g.FillRectangle(b, new Rectangle(0, 0, Width, Height));
+                    g.FillRectangle(b, new Rectangle(0, 0, Width+1, Height+1));
                 }
                
                 DrawSelectedBackground(g);
@@ -319,14 +299,7 @@ namespace KinectSkeleton
            
         }
 
-        public Rectangle TrackBounds
-        {
-            get
-            {
-                Rectangle result = new Rectangle(10, 15, Width - 20, 5);
-                return result;
-            }
-        }
+        
 
         public void DrawSelectedTrack(Graphics g)
         {
@@ -369,6 +342,7 @@ namespace KinectSkeleton
             return x;
 
         }
+
         private int GetValue(int x) {
             if (x < 10) {
                 return Minimum;
@@ -378,16 +352,6 @@ namespace KinectSkeleton
             }
             int value = Minimum + ((x - 10) * (Maximum - Minimum)) / (Width - 20);
             return value;
-        }
-
-
-        private Rectangle SliderBounds
-        {
-            get
-            {
-                int playPosition = GetX(Value);
-                return new Rectangle(playPosition - 7, 7, 14, Height - 25);
-            }
         }
 
         public void DrawSlider(Graphics g) {
@@ -415,13 +379,16 @@ namespace KinectSkeleton
         
         }
 
+        #endregion
+
+        #region Methods
+
         protected override void OnResize(EventArgs e)
         {
             DrawContent();
            
             base.OnResize(e);
         }
-
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -434,9 +401,9 @@ namespace KinectSkeleton
                 {
                     _selecting = true;
                     Selected = false;
-                    OnSelectionChanged(this, EventArgs.Empty);
                     _selectionStart = GetValue(e.X);
                     _selectionStartX = e.X;
+                    OnSelectionChanged(this, EventArgs.Empty);
                 }
                
             }
@@ -446,9 +413,12 @@ namespace KinectSkeleton
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            this.Focus();
             if (_draggingSlider) {
                 Value = GetValue(e.X);
+                this.Refresh();
                 OnValueChanged(this, EventArgs.Empty);
+                
             }
             if (_selecting) {
                 if (e.X < _selectionStartX)
@@ -469,7 +439,6 @@ namespace KinectSkeleton
             base.OnMouseMove(e);
         }
         
-
         protected override void OnMouseUp(MouseEventArgs e)
         {
             if (_draggingSlider)
@@ -503,7 +472,183 @@ namespace KinectSkeleton
             base.OnMouseUp(e);
         }
 
+        #endregion
 
+        #region properties
+
+        /// <summary>
+        /// Gets or sets the optional application manager for this viewer control.  If this is set, then
+        /// it enables this tool access to the application for coordinating "linked" actions. 
+        /// </summary>
+        [Description(" Gets or sets the optional application manager for this viewer control.  If this is set, then " +
+            "it enables this tool access to the application for coordinating linked behavior"),
+        Category("Behavior")]
+        public ApplicationManager App { get; set; }
+
+        /// <summary>
+        /// Gets or sets the maximum value that corresponds to the right side of the slider.
+        /// </summary>
+        [Description("Gets or sets the maximum value that corresponds to the right side of the slider.")]
+        [Category("Behavior")]
+        public int Maximum
+        {
+            get { return _maximum; }
+            set
+            {
+                _maximum = value;
+                DrawContent();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the minimum value that corresponds to the left side of the slider.
+        /// </summary>
+        [Description("Gets or sets the minimum value that corresponds to the left side of the slider.")]
+        [Category("Behavior")]
+        public int Minimum
+        {
+            get { return _minimum; }
+            set
+            {
+                _minimum = value;
+                DrawContent();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets whether a region of the slider has been selected.
+        /// </summary>
+        [Description(" Gets or sets whether a region of the slider has been selected.")]
+        [Category("Behavior")]
+        public bool Selected
+        {
+            get { return _selected; }
+            set
+            {
+                _selected = value;
+                DrawContent();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the color of the selected part of the track line drawn down the middle of the control.
+        /// </summary>
+        [Description("Gets or sets the color of the selected part of the track line drawn down the middle of the control.")]
+        [Category("Appearance")]
+        public Color SelectedColor
+        {
+            get { return _selectedColor; }
+            set
+            {
+                _selectedColor = value;
+                DrawContent();
+            }
+
+        }
+
+        /// <summary>
+        /// Gets or sets an integer value that represents the end of the selected region.
+        /// </summary>
+        [Description("Gets or sets an integer value that represents the end of the selected region.")]
+        [Category("Behavior")]
+        public int SelectionEnd
+        {
+            get { return _selectionEnd; }
+            set
+            {
+                _selectionEnd = value;
+                DrawContent();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets an integer value that represents the start of the selected region.
+        /// </summary>
+        [Description("Gets or sets an integer value that represents the start of the selected region.")]
+        [Category("Behavior")]
+        public int SelectionStart
+        {
+            get { return _selectionStart; }
+            set
+            {
+                _selectionStart = value;
+                DrawContent();
+            }
+        }
+
+
+        /// <summary>
+        /// Gets the rectangular extent of the slider grip representing the current position of the slider.
+        /// </summary>
+        [Browsable(false)]
+        private Rectangle SliderBounds
+        {
+            get
+            {
+                int playPosition = GetX(Value);
+                return new Rectangle(playPosition - 7, 7, 14, Height - 25);
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the color of the track slider control that indicates the current play position.
+        /// </summary>
+        [Description("Gets or sets the color of the track line drawn down the middle of the control.")]
+        [Category("Appearance")]
+        public Color SliderColor
+        {
+            get { return _sliderColor; }
+            set
+            {
+                _sliderColor = value;
+                DrawContent();
+            }
+        }
+
+        /// <summary>
+        /// Gets the rectangle bounding box for the narrow track that runs down the center.
+        /// </summary>
+        [Browsable(false)]
+        public Rectangle TrackBounds
+        {
+            get
+            {
+                Rectangle result = new Rectangle(10, 15, Width - 20, 5);
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the color of the track line drawn down the middle of the control.
+        /// </summary>
+        [Description("Gets or sets the color of the track line drawn down the middle of the control.")]
+        [Category("Appearance")]
+        public Color TrackColor
+        {
+            get { return _trackColor; }
+            set
+            {
+                _trackColor = value;
+                DrawContent();
+            }
+
+        }
+
+        /// <summary>
+        /// Gets or sets the value that represents the current play position of the slider.
+        /// </summary>
+        [Description("Gets or sets the value that represents the current play position of the slider.")]
+        [Category("Behavior")]
+        public int Value
+        {
+            get { return _value; }
+            set
+            {
+                _value = value;
+                DrawContent();
+            }
+        }
+        #endregion
 
     }
 }
