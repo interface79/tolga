@@ -91,7 +91,7 @@ namespace KinectSkeleton
         /// <summary>
         /// Starts recording skeletons.  Events are only fired if there is a tracked skeleton.
         /// </summary>
-        public void Start()
+        public bool Start()
         {
             
             try
@@ -99,11 +99,12 @@ namespace KinectSkeleton
                 Runtime nui = Runtime.Kinects[0];
                 nui.Initialize(RuntimeOptions.UseSkeletalTracking);
                 nui.SkeletonFrameReady += SkeletonFrameReady;
+                return true;
             }
             catch (Exception) {
                 MessageBox.Show("The Kinect sensor either is not connected or is not currently enabled.");
             }
-            
+            return false;
             
         }
 

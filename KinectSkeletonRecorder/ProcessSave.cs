@@ -69,10 +69,12 @@ namespace KinectSkeleton
             }
             if (app.RecentFiles != null)
             {
-                if (app.RecentFiles.Items[0] == animation.Filename) {
-                    app.RecentFiles.Add(animation.Filename);
+                if (app.RecentFiles.Items.Count == 0 || app.RecentFiles.Items[0] != animation.Filename)
+                {
+                    app.RecentFiles.Items.Insert(0, animation.Filename);
+                   
                 }
-                
+               
             }
             app.Changed = false;
             app.UpdateMenus();

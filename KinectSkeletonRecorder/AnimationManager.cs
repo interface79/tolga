@@ -91,6 +91,7 @@ namespace KinectSkeleton
             _playTimer.Tick += PlayTimer_Tick;
             SkeletonKinectManager.Instance.SkeletonReady += Instance_SkeletonReady;
             ClipboardAnimation = new SkeletonAnimation();
+            CurrentAnimation = new SkeletonAnimation();
         }
 
         void Instance_SkeletonReady(object sender, SkeletonEventArgs e)

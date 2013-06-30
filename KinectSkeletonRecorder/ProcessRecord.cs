@@ -53,7 +53,10 @@ namespace KinectSkeleton
             if (!app.Recording)
             {
                 //  .AnimationManager.Instance.CurrentAnimation = new SkeletonAnimation();
-                SkeletonKinectManager.Instance.Start();
+                bool started = SkeletonKinectManager.Instance.Start();
+                if (!started) {
+                    return;
+                }
                 if (app.ButtonRecord != null) {
                     app.ButtonRecord.Image = Properties.Resources.stop32;
                     app.ButtonRecord.Text = Messages.ProcessRecord_Stop;
@@ -82,7 +85,10 @@ namespace KinectSkeleton
                 }
                 if (app.Slider != null) {
                     app.Slider.Enabled = true;
-                    app.Slider.Maximum = app.AnimationManager.CurrentAnimation.Snapshots.Count - 1;
+                    if (app.AnimationManager.CurrentAnimation != null && app.AnimationManager.CurrentAnimation.Snapshots != null &&
+                        app.AnimationManager.CurrentAnimation.Snapshots.Count > 0) {
+                            app.Slider.Maximum = app.AnimationManager.CurrentAnimation.Snapshots.Count - 1;
+                    }
                     app.Slider.Minimum = 0;
                 }
                 ToolStripMenuItem menuSelect = app.GetMenu("menuSelectAll");
