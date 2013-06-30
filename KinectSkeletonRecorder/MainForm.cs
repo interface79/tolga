@@ -45,6 +45,7 @@ namespace KinectSkeleton
             InitializeComponent();
             SkeletonKinectManager.Instance.SkeletonReady += Instance_SkeletonReady;
             app.RecentFiles.Load();
+            app.UpdateMenus();
         }
 
         void Instance_SkeletonReady(object sender, SkeletonEventArgs e)
@@ -55,28 +56,28 @@ namespace KinectSkeleton
 
         private void buttonRecord_Click(object sender, EventArgs e)
         {
-            ProcessRecord.ToggleRecord(app);
+            app.ToggleRecord();
         }
 
         private void buttonPlay_Click(object sender, EventArgs e)
         {
-            ProcessPlay.TogglePlay(app);
+            app.TogglePlay();
         }
        
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ProcessNew.New(app);
+            app.New();
         }
 
         private void menuOpen_Click(object sender, EventArgs e)
         {
-            ProcessOpen.Open(this.app);
+            app.Open();
         }
 
         private void menuSaveAs_Click(object sender, EventArgs e)
         {
-            ProcessSave.Save(this.app);
+            app.SaveAs();
         }
 
         /// <summary>
@@ -86,7 +87,7 @@ namespace KinectSkeleton
         /// <param name="e"></param>
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ProcessAbout.About(app);
+            app.About();
         }
 
         private void playSlider_PlayPositionChanged(object sender, EventArgs e)
@@ -120,10 +121,46 @@ namespace KinectSkeleton
             copy.Run();
         }
 
-        private void menuFile_Click(object sender, EventArgs e)
-        {
 
+        private void menuUndo_Click(object sender, EventArgs e)
+        {
+            app.ActionManager.Undo();
         }
+
+        private void menuRedo_Click(object sender, EventArgs e)
+        {
+            app.ActionManager.Redo();
+        }
+
+        private void menuPaste_Click(object sender, EventArgs e)
+        {
+            ActionPaste paste = new ActionPaste(app);
+            paste.Run();
+        }
+
+        private void menuDelete_Click(object sender, EventArgs e)
+        {
+            ActionDelete del = new ActionDelete(app);
+            del.Run();
+        }
+
+        private void menuCut_Click(object sender, EventArgs e)
+        {
+            ActionCut cut = new ActionCut(app);
+            cut.Run();
+        }
+
+        private void menuSelectAll_Click(object sender, EventArgs e)
+        {
+            app.SelectAll();
+        }
+
+        private void menuSave_Click(object sender, EventArgs e)
+        {
+            app.Save();
+        }
+
+       
 
       
 

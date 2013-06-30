@@ -134,27 +134,9 @@ namespace KinectSkeleton
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        protected virtual void OnSelectionChanged(object sender, EventArgs e) {
+        public virtual void OnSelectionChanged(object sender, EventArgs e) {
             if (App != null) {
-                ToolStripMenuItem cut = App.GetMenu("menuCut");
-                if (cut != null) {
-                    cut.Enabled = Selected;
-                }
-                ToolStripMenuItem del = App.GetMenu("menuDelete");
-                if (del != null)
-                {
-                    del.Enabled = Selected;
-                }
-                ToolStripMenuItem copy = App.GetMenu("menuCopy");
-                if (copy != null)
-                {
-                    copy.Enabled = Selected;
-                }
-                if (App.SliderContextMenu != null) {
-                    App.SliderContextMenu.Copy.Enabled = Selected;
-                    App.SliderContextMenu.Delete.Enabled = Selected;
-                    App.SliderContextMenu.Cut.Enabled = Selected;
-                }
+                App.UpdateMenus();
             }
             
             if (SelectionChanged != null) {
@@ -226,7 +208,10 @@ namespace KinectSkeleton
                 DrawTrack(g);
                 DrawSelectedTrack(g);
                 DrawTicks(g);
-                DrawSlider(g);
+                if (!_selected) {
+                    DrawSlider(g);
+                }
+                
                 
             }
             Bitmap oldBuffer = _backbuffer;
@@ -268,7 +253,9 @@ namespace KinectSkeleton
             if (!Enabled) {
                 return;
             }
-
+            if (_selecting) {
+                return;
+            }
             HSLColor trackColor = new HSLColor(TrackColor);
             trackColor.Luminosity = .9;
             Color light = (Color)trackColor;
@@ -309,6 +296,9 @@ namespace KinectSkeleton
             }
             if (!Enabled) {
                 return;
+            }
+            if (_selecting) {
+                return; 
             }
 
             HSLColor trackColor = new HSLColor(SelectedColor);
@@ -396,6 +386,7 @@ namespace KinectSkeleton
                 if (SliderBounds.Contains(e.Location))
                 {
                     _draggingSlider = true;
+                    _selected = false;
                 }
                 else
                 {
@@ -421,19 +412,25 @@ namespace KinectSkeleton
                 
             }
             if (_selecting) {
-                if (e.X < _selectionStartX)
-                {
-                    SelectionStart = GetValue(e.X);
-                    SelectionEnd = _selectionStart;
-                    Selected = true;
-                    OnSelectionChanged(this, EventArgs.Empty);
-                }
-                else if(e.X > _selectionStartX) {
-                    Selected = true;
-                    SelectionStart = _selectionStart;
+                Selected = true;
+                if(e.X > _selectionStartX) {
+                    SelectionStart = GetValue(_selectionStartX);
                     SelectionEnd = GetValue(e.X);
                     OnSelectionChanged(this, EventArgs.Empty);
                 }
+                else if (e.X < _selectionStartX)
+                {
+                    SelectionStart = GetValue(e.X);
+                    SelectionEnd = GetValue(_selectionStartX);
+                    OnSelectionChanged(this, EventArgs.Empty);
+                }
+                else if (e.X == _selectionStartX) {
+                    Selected = false;
+                }
+                Value = GetValue(e.X);
+                this.Refresh();
+                OnValueChanged(this, EventArgs.Empty);
+             
                 // if it is exactly the same Selected is still false.
             }
             base.OnMouseMove(e);
@@ -441,33 +438,43 @@ namespace KinectSkeleton
         
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            if (_draggingSlider)
-            {
-                Value = GetValue(e.X);
-                OnValueChanged(this, EventArgs.Empty);
-            }
-            if (_selecting)
-            {
-                if (e.X < _selectionStartX)
-                {
-                    SelectionStart = GetValue(e.X);
-                    SelectionEnd = _selectionStart;
-                }
-                else if (e.X > _selectionStartX)
-                {
-                    SelectionStart = _selectionStart;
-                    SelectionEnd = GetValue(e.X);
-                    
-                }
-                else {
-                    Selected = false;
-                }
-                OnSelectionChanged(this, EventArgs.Empty);
-            }
             if ((e.Button & System.Windows.Forms.MouseButtons.Left) == System.Windows.Forms.MouseButtons.Left)
             {
-                _draggingSlider = false;
-                _selecting = false;
+                if (_draggingSlider)
+                {
+                    Value = GetValue(e.X);
+                    OnValueChanged(this, EventArgs.Empty);
+                }
+                if (_selecting)
+                {
+                    _selecting = false;
+                    if (e.X > _selectionStartX)
+                    {
+                        SelectionStart = GetValue(_selectionStartX);
+                        SelectionEnd = GetValue(e.X);
+                        Selected = true;
+                    }
+                    else if (e.X == _selectionStartX)
+                    {
+                        Selected = false;
+                        this.Value = GetValue(e.X);
+                        _selected = false; // we clicked on a location, return the view to showing the slider, and not the selection region.
+                        OnValueChanged(this, EventArgs.Empty);
+                    }
+                    else if (e.X < _selectionStartX)
+                    {
+                        SelectionStart = GetValue(e.X);
+                        SelectionEnd = GetValue(_selectionStartX);
+                        Selected = true;
+                    }
+
+                    OnSelectionChanged(this, EventArgs.Empty);
+                }
+                if ((e.Button & System.Windows.Forms.MouseButtons.Left) == System.Windows.Forms.MouseButtons.Left)
+                {
+                    _draggingSlider = false;
+                    _selecting = false;
+                }
             }
             base.OnMouseUp(e);
         }

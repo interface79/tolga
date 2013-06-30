@@ -30,14 +30,14 @@ using System.Windows.Forms;
 
 namespace KinectSkeleton
 {
-    public class ProcessOpen
+    public class ProcessOpen : IProcess
     {
        
         /// <summary>
         /// handles the modifications necessary to open the file.
         /// </summary>
         /// <param name="app"></param>
-        public static void Open(ApplicationManager app) {
+        public void Run(ApplicationManager app) {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = Messages.Animation_Files_Filter + "|*.xml"; // the file extension would not be language sensitive.
             DialogResult r = ofd.ShowDialog(app.MainForm);
@@ -49,7 +49,7 @@ namespace KinectSkeleton
             animation.Open(ofd.FileName);
             app.AnimationManager.CurrentAnimation = animation;
             if (app.AnimationManager.Playing) {
-                ProcessPlay.TogglePlay(app);
+                app.TogglePlay();
             }
             if (string.IsNullOrEmpty(app.AnimationManager.CurrentAnimation.Name))
             {
@@ -73,9 +73,33 @@ namespace KinectSkeleton
                 if (app.RecentFiles != null) {
                     app.RecentFiles.Add(ofd.FileName);
                 }
-                
-            }
+                ToolStripMenuItem menuSelect = app.GetMenu("menuSelectAll");
+                if (menuSelect != null)
+                {
+                    menuSelect.Enabled = (app.AnimationManager.CurrentAnimation.Snapshots.Count > 0);
+                }
+                if (app.Viewer != null) {
+                    if (app.AnimationManager.CurrentAnimation != null && app.AnimationManager.CurrentAnimation.Snapshots != null &&
+                        app.AnimationManager.CurrentAnimation.Snapshots.Count > 0) {
+                       app.Viewer.DrawSnapshot(app.AnimationManager.CurrentAnimation.Snapshots[0]);
+                    }
+                    
+                }
 
+            }
+            app.Changed = false;
+            app.UpdateMenus();
+
+        }
+
+        /// <summary>
+        /// New is always enabled.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        public bool IsEnabled(ApplicationManager app)
+        {
+            return true;
         }
     }
 }

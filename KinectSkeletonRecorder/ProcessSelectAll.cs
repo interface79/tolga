@@ -19,7 +19,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * 
- * The initial version of this file was created on 6/29/2013 5:47:56 PM
+ * The initial version of this file was created on 6/30/2013 10:56:15 AM
  * 
  */
 using System;
@@ -31,27 +31,43 @@ using System.Threading.Tasks;
 namespace KinectSkeleton
 {
     /// <summary>
-    /// The ProcessAbout class
+    /// The ProcessSelectAll class
     /// </summary>
-    public class ProcessAbout : IProcess
+    public class ProcessSelectAll : IProcess
     {
+       
+
+       
+
+        #region Methods
 
         /// <summary>
-        /// Launches the About dialog.
+        /// Selects the entire range of the slider.
         /// </summary>
         /// <param name="app"></param>
         public void Run(ApplicationManager app) {
-            AboutDialog dialog = new AboutDialog();
-            dialog.ShowDialog(app.MainForm);
+            app.Slider.Selected = true;
+            app.Slider.SelectionStart = 0;
+            app.Slider.SelectionEnd = app.AnimationManager.SnapshotCount;
+            app.Slider.OnSelectionChanged(app.Slider, EventArgs.Empty);
         }
 
         /// <summary>
-        /// The about process is always enabled.
+        /// Gets whether or not this process is enabled
         /// </summary>
         /// <param name="app"></param>
+        /// <returns></returns>
         public bool IsEnabled(ApplicationManager app) {
-            return true;
+            if (app.AnimationManager != null)
+            {
+                return (app.AnimationManager.CurrentAnimation != null && app.AnimationManager.CurrentAnimation.Snapshots != null &&
+                    app.AnimationManager.CurrentAnimation.Snapshots.Count > 0);
+               
+            }
+            return false;
         }
+
+        #endregion
 
 
     }

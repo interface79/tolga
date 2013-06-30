@@ -66,6 +66,7 @@ namespace KinectSkeleton
             this.menuCut = new System.Windows.Forms.ToolStripMenuItem();
             this.menuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.menuPaste = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.menuRedo = new System.Windows.Forms.ToolStripMenuItem();
             this.menuUndo = new System.Windows.Forms.ToolStripMenuItem();
@@ -75,12 +76,12 @@ namespace KinectSkeleton
             this.toolTipHelp = new System.Windows.Forms.ToolTip(this.components);
             this.buttonPlay = new System.Windows.Forms.Button();
             this.buttonRecord = new System.Windows.Forms.Button();
+            this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
+            this.panelSlider = new System.Windows.Forms.Panel();
+            this.skeletonView1 = new KinectSkeleton.SkeletonView();
             this.playSlider = new KinectSkeleton.SelectableSlider();
             this.app = new KinectSkeleton.ApplicationManager();
             this.sliderContextMenu1 = new KinectSkeleton.SliderContextMenu();
-            this.skeletonView1 = new KinectSkeleton.SkeletonView();
-            this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
-            this.panelSlider = new System.Windows.Forms.Panel();
             this.menuMain.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
@@ -95,7 +96,7 @@ namespace KinectSkeleton
             this.menuHelp});
             this.menuMain.Location = new System.Drawing.Point(0, 0);
             this.menuMain.Name = "menuMain";
-            this.menuMain.Size = new System.Drawing.Size(866, 24);
+            this.menuMain.Size = new System.Drawing.Size(681, 24);
             this.menuMain.TabIndex = 5;
             this.menuMain.Text = "File";
             // 
@@ -113,7 +114,6 @@ namespace KinectSkeleton
             this.menuFile.Size = new System.Drawing.Size(37, 20);
             this.menuFile.Text = "File";
             this.menuFile.ToolTipText = "Clears the current animation and prepares to record new animation content.";
-            this.menuFile.Click += new System.EventHandler(this.menuFile_Click);
             // 
             // menuNew
             // 
@@ -159,6 +159,7 @@ namespace KinectSkeleton
             this.menuSave.Text = "Save";
             this.menuSave.ToolTipText = "Saves the current animation with it\'s current filename, or saves as if no filenam" +
     "e has been specified.";
+            this.menuSave.Click += new System.EventHandler(this.menuSave_Click);
             // 
             // toolStripSeparator3
             // 
@@ -179,6 +180,7 @@ namespace KinectSkeleton
             this.menuCut,
             this.menuDelete,
             this.menuPaste,
+            this.menuSelectAll,
             this.toolStripSeparator1,
             this.menuRedo,
             this.menuUndo});
@@ -192,7 +194,7 @@ namespace KinectSkeleton
             this.menuCopy.Image = global::KinectSkeleton.Properties.Resources.Copy16;
             this.menuCopy.Name = "menuCopy";
             this.menuCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.menuCopy.Size = new System.Drawing.Size(144, 22);
+            this.menuCopy.Size = new System.Drawing.Size(164, 22);
             this.menuCopy.Text = "Copy";
             this.menuCopy.ToolTipText = "Copies the selected slider range to an internal clipboard.  Does not affect the  " +
     "windows clipboard.";
@@ -204,8 +206,11 @@ namespace KinectSkeleton
             this.menuCut.Image = global::KinectSkeleton.Properties.Resources.Cut16;
             this.menuCut.Name = "menuCut";
             this.menuCut.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.menuCut.Size = new System.Drawing.Size(144, 22);
+            this.menuCut.Size = new System.Drawing.Size(164, 22);
             this.menuCut.Text = "Cut";
+            this.menuCut.ToolTipText = "Removes the current selection and copies it to the internal clipboard.  This curr" +
+    "ently does not copy anything to the Windows clipboard.";
+            this.menuCut.Click += new System.EventHandler(this.menuCut_Click);
             // 
             // menuDelete
             // 
@@ -213,8 +218,10 @@ namespace KinectSkeleton
             this.menuDelete.Image = global::KinectSkeleton.Properties.Resources.Delete16;
             this.menuDelete.Name = "menuDelete";
             this.menuDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.menuDelete.Size = new System.Drawing.Size(144, 22);
+            this.menuDelete.Size = new System.Drawing.Size(164, 22);
             this.menuDelete.Text = "Delete";
+            this.menuDelete.ToolTipText = "Removes the animation frames corresponding to the selection on the slider.";
+            this.menuDelete.Click += new System.EventHandler(this.menuDelete_Click);
             // 
             // menuPaste
             // 
@@ -222,13 +229,25 @@ namespace KinectSkeleton
             this.menuPaste.Image = global::KinectSkeleton.Properties.Resources.Paste16;
             this.menuPaste.Name = "menuPaste";
             this.menuPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.menuPaste.Size = new System.Drawing.Size(144, 22);
+            this.menuPaste.Size = new System.Drawing.Size(164, 22);
             this.menuPaste.Text = "Paste";
+            this.menuPaste.ToolTipText = "Pastes the content from the internal clipboard into the image.  If a region is se" +
+    "lected, this replaces the selected region.";
+            this.menuPaste.Click += new System.EventHandler(this.menuPaste_Click);
+            // 
+            // menuSelectAll
+            // 
+            this.menuSelectAll.Enabled = false;
+            this.menuSelectAll.Name = "menuSelectAll";
+            this.menuSelectAll.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
+            this.menuSelectAll.Size = new System.Drawing.Size(164, 22);
+            this.menuSelectAll.Text = "Select All";
+            this.menuSelectAll.Click += new System.EventHandler(this.menuSelectAll_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(141, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(161, 6);
             // 
             // menuRedo
             // 
@@ -236,8 +255,11 @@ namespace KinectSkeleton
             this.menuRedo.Image = global::KinectSkeleton.Properties.Resources.Redo16;
             this.menuRedo.Name = "menuRedo";
             this.menuRedo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.menuRedo.Size = new System.Drawing.Size(144, 22);
+            this.menuRedo.Size = new System.Drawing.Size(164, 22);
             this.menuRedo.Text = "Redo";
+            this.menuRedo.ToolTipText = "Redo one edit action from the undo stack.  This only applies to edit menu actions" +
+    ".";
+            this.menuRedo.Click += new System.EventHandler(this.menuRedo_Click);
             // 
             // menuUndo
             // 
@@ -245,8 +267,10 @@ namespace KinectSkeleton
             this.menuUndo.Image = global::KinectSkeleton.Properties.Resources.Undo16;
             this.menuUndo.Name = "menuUndo";
             this.menuUndo.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.menuUndo.Size = new System.Drawing.Size(144, 22);
+            this.menuUndo.Size = new System.Drawing.Size(164, 22);
             this.menuUndo.Text = "Undo";
+            this.menuUndo.ToolTipText = "Undoes one edit action.  Only edit actions are added to the undo stack.";
+            this.menuUndo.Click += new System.EventHandler(this.menuUndo_Click);
             // 
             // menuHelp
             // 
@@ -302,6 +326,43 @@ namespace KinectSkeleton
             this.buttonRecord.UseVisualStyleBackColor = true;
             this.buttonRecord.Click += new System.EventHandler(this.buttonRecord_Click);
             // 
+            // toolStripContainer1
+            // 
+            // 
+            // toolStripContainer1.ContentPanel
+            // 
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.skeletonView1);
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.panelSlider);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(681, 605);
+            this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
+            this.toolStripContainer1.Name = "toolStripContainer1";
+            this.toolStripContainer1.Size = new System.Drawing.Size(681, 630);
+            this.toolStripContainer1.TabIndex = 7;
+            this.toolStripContainer1.Text = "toolStripContainer1";
+            // 
+            // panelSlider
+            // 
+            this.panelSlider.Controls.Add(this.buttonRecord);
+            this.panelSlider.Controls.Add(this.buttonPlay);
+            this.panelSlider.Controls.Add(this.playSlider);
+            this.panelSlider.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSlider.Location = new System.Drawing.Point(0, 0);
+            this.panelSlider.Name = "panelSlider";
+            this.panelSlider.Size = new System.Drawing.Size(681, 71);
+            this.panelSlider.TabIndex = 0;
+            // 
+            // skeletonView1
+            // 
+            this.skeletonView1.App = null;
+            this.skeletonView1.BackColor = System.Drawing.Color.White;
+            this.skeletonView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.skeletonView1.Location = new System.Drawing.Point(0, 71);
+            this.skeletonView1.Name = "skeletonView1";
+            this.skeletonView1.Size = new System.Drawing.Size(681, 534);
+            this.skeletonView1.TabIndex = 0;
+            this.skeletonView1.Text = "skeletonView1";
+            // 
             // playSlider
             // 
             this.playSlider.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -316,7 +377,7 @@ namespace KinectSkeleton
             this.playSlider.SelectedColor = System.Drawing.Color.LightBlue;
             this.playSlider.SelectionEnd = 0;
             this.playSlider.SelectionStart = 0;
-            this.playSlider.Size = new System.Drawing.Size(676, 45);
+            this.playSlider.Size = new System.Drawing.Size(491, 45);
             this.playSlider.SliderColor = System.Drawing.Color.Blue;
             this.playSlider.TabIndex = 6;
             this.playSlider.Text = "selectableSlider1";
@@ -344,48 +405,11 @@ namespace KinectSkeleton
             this.sliderContextMenu1.Name = "sliderContextMenu1";
             this.sliderContextMenu1.Size = new System.Drawing.Size(108, 92);
             // 
-            // skeletonView1
-            // 
-            this.skeletonView1.App = null;
-            this.skeletonView1.BackColor = System.Drawing.Color.White;
-            this.skeletonView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.skeletonView1.Location = new System.Drawing.Point(0, 71);
-            this.skeletonView1.Name = "skeletonView1";
-            this.skeletonView1.Size = new System.Drawing.Size(866, 316);
-            this.skeletonView1.TabIndex = 0;
-            this.skeletonView1.Text = "skeletonView1";
-            // 
-            // toolStripContainer1
-            // 
-            // 
-            // toolStripContainer1.ContentPanel
-            // 
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.skeletonView1);
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.panelSlider);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(866, 387);
-            this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
-            this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(866, 412);
-            this.toolStripContainer1.TabIndex = 7;
-            this.toolStripContainer1.Text = "toolStripContainer1";
-            // 
-            // panelSlider
-            // 
-            this.panelSlider.Controls.Add(this.buttonRecord);
-            this.panelSlider.Controls.Add(this.buttonPlay);
-            this.panelSlider.Controls.Add(this.playSlider);
-            this.panelSlider.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelSlider.Location = new System.Drawing.Point(0, 0);
-            this.panelSlider.Name = "panelSlider";
-            this.panelSlider.Size = new System.Drawing.Size(866, 71);
-            this.panelSlider.TabIndex = 0;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(866, 436);
+            this.ClientSize = new System.Drawing.Size(681, 654);
             this.Controls.Add(this.toolStripContainer1);
             this.Controls.Add(this.menuMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -433,6 +457,7 @@ namespace KinectSkeleton
         private ApplicationManager app;
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
         private System.Windows.Forms.Panel panelSlider;
+        private System.Windows.Forms.ToolStripMenuItem menuSelectAll;
 
 
 

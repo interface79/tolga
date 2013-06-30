@@ -68,6 +68,11 @@ namespace KinectSkeleton
 
         #region Methods
 
+        public void Clear() {
+            _currentSnapshot = null;
+            DrawContent();
+        }
+
         /// <summary>
         /// Refreshes the buffer by re-drawing the current snapshot onto the buffer image, using the current control's dimension
         /// and the current projector settings.
@@ -225,8 +230,12 @@ namespace KinectSkeleton
         /// <param name="color"></param>
         public void DrawJoint(Graphics g, SkeletonJoint joint, Color color) {
             Point position = _projector.ToPoint(joint, Width, Height);
+            int size = 20;
+            if (joint.Index == 3) {
+                size = 40;
+            }
             using(Brush brush = new SolidBrush(color)){
-                g.FillEllipse(brush, new Rectangle(position.X - 10, position.Y - 10, 20, 20));
+                g.FillEllipse(brush, new Rectangle(position.X - size/2, position.Y - size/2, size, size));
             }
             
         }

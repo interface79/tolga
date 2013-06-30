@@ -96,31 +96,16 @@ namespace KinectSkeleton
         void Instance_SkeletonReady(object sender, SkeletonEventArgs e)
         {
             CurrentAnimation.Snapshots.Add(e.Snapshot);
+            _app.Changed = true;
+            _app.UpdateMenus();
+
         }
 
 
 
         #region Methods
 
-        /// <summary>
-        /// The enabled state of the "Paste" menu items depend on whether or not the clipboard has content.
-        /// </summary>
-        public void UpdatePasteEnabled() {
-            if (_app != null) {
-                bool pasteEnabled =  (ClipboardAnimation != null && ClipboardAnimation.Snapshots != null &&
-                        ClipboardAnimation.Snapshots.Count > 0);
-                ToolStripMenuItem menuPaste = _app.GetMenu("menuPaste");
-
-                if (menuPaste != null) {
-                    menuPaste.Enabled = pasteEnabled;
-                }
-                if (_app.SliderContextMenu != null) {
-                    _app.SliderContextMenu.Paste.Enabled = pasteEnabled;
-                }
-            }
         
-        }
-
         /// <summary>
         /// Gets a copy of the specified range as a new animation
         /// </summary>
@@ -199,7 +184,7 @@ namespace KinectSkeleton
         }
 
         public void UpdateSnapshot() {
-            if (_playPosition > 0 && _playPosition < SnapshotCount)
+            if (_playPosition >= 0 && _playPosition < SnapshotCount)
             {
                 CurrentSnapshot = CurrentAnimation.Snapshots[_playPosition];
                 if (_app.Viewer != null)
@@ -214,11 +199,12 @@ namespace KinectSkeleton
             }
             else
             {
-                _playTimer.Stop();
-                _playPosition = 0;
-                Playing = false;
-                ProcessPlay.TogglePlay(_app);
-                OnPlayEnded(this, EventArgs.Empty);
+                if (Playing) {
+                    _playPosition = 0;
+                    _app.TogglePlay();
+                    OnPlayEnded(this, EventArgs.Empty);
+                }
+                
             }
         }
 

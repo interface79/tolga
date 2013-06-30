@@ -85,7 +85,9 @@ namespace KinectSkeleton
         public void Redo()
         {
             _app.AnimationManager.ClipboardAnimation.Snapshots = Snapshots;
-            _app.AnimationManager.UpdatePasteEnabled();
+            _app.UpdateMenus();
+            
+
             
         }
 
@@ -95,7 +97,7 @@ namespace KinectSkeleton
         public void Undo()
         {
             _app.AnimationManager.ClipboardAnimation.Snapshots = OldSnapshots;
-            _app.AnimationManager.UpdatePasteEnabled();
+            _app.UpdateMenus();
         }
 
 

@@ -43,6 +43,14 @@ namespace KinectSkeleton
         /// </summary>
         private int _currentIndex;
 
+        /// <summary>
+        /// Gets the integer index int the action list for the most recently implemented action, or the last action not undone.
+        /// </summary>
+        public int CurrentIndex
+        {
+            get { return _currentIndex; }
+        }
+
         private ApplicationManager _app;
 
         #endregion
@@ -81,18 +89,7 @@ namespace KinectSkeleton
             }
             Actions.Add(action);
             _currentIndex = Actions.Count - 1;
-        }
-
-        /// <summary>
-        /// Causes the last Action to undo itself.  This also moves the current index back by one.
-        /// </summary>
-        public void Undo()
-        {
-            if (Actions.Count > 0 && _currentIndex > 0)
-            {
-                Actions[_currentIndex].Undo();
-                _currentIndex--;
-            }
+            _app.UpdateMenus();
         }
 
         /// <summary>
@@ -107,7 +104,25 @@ namespace KinectSkeleton
                 _currentIndex++;
                 Actions[_currentIndex].Redo();
             }
+            _app.UpdateMenus();
         }
+
+        /// <summary>
+        /// Causes the last Action to undo itself.  This also moves the current index back by one.
+        /// </summary>
+        public void Undo()
+        {
+            if (Actions.Count > 0 && _currentIndex >= 0)
+            {
+                Actions[_currentIndex].Undo();
+                _currentIndex--;
+            }
+            _app.UpdateMenus();
+        }
+
+        
+
+        
 
         #endregion
 

@@ -39,7 +39,12 @@ namespace KinectSkeleton
     {
         #region Fields
 
+        private bool _recording;
+
+
         #endregion
+
+ 
 
         /// <summary>
         /// Creates a new instance of the ActionManager when called locally from the public static Instance getter.
@@ -49,10 +54,64 @@ namespace KinectSkeleton
             this.AnimationManager = new AnimationManager(this);
             this.ActionManager = new ActionManager(this);
             this.RecentFiles = new RecentFileManager(this);
-            
+            ProcessAbout = new ProcessAbout();
+            ProcessNew = new ProcessNew();
+            ProcessOpen = new ProcessOpen();
+            ProcessPlay = new ProcessPlay();
+            ProcessRecord = new ProcessRecord();
+            ProcessSave = new ProcessSave();
+            ProcessSaveAs = new ProcessSaveAs();
+            ProcessSelectAll = new ProcessSelectAll();
+            ProcessUpdateMenus = new ProcessUpdateMenus();
         }
 
         #region Methods
+
+        public void About() {
+            Run(ProcessAbout);
+        }
+
+        public void New() {
+            Run(ProcessNew);
+        }
+
+        public void Open() {
+            Run(ProcessOpen);
+        }
+
+        public void TogglePlay() {
+            Run(ProcessPlay);
+        }
+
+        public void ToggleRecord() {
+            Run(ProcessRecord);
+        }
+
+        public void Save() {
+            Run(ProcessSave);
+        }
+
+        public void SaveAs() {
+            Run(ProcessSaveAs);
+        }
+
+        public void SelectAll() {
+            Run(ProcessSave);
+        }
+
+        public void UpdateMenus() {
+            Run(ProcessUpdateMenus);
+        }
+
+        private void Run(IProcess process){
+            if (process != null) {
+                if (process.IsEnabled(this))
+                {
+                    process.Run(this);
+                }
+            }
+            
+        }
 
         /// <summary>
         /// Gets the ToolStripMenuItem that matches the specified name.  This searches
@@ -93,13 +152,71 @@ namespace KinectSkeleton
 
         #endregion
 
-        #region Properties
+
+        #region Processes
 
         /// <summary>
-        /// This doesn't require it to be the MainForm class from this application.
-        /// This can be any form that is set up to contain the project.
+        /// Gets or sets the class that implements the about process.
         /// </summary>
-        public Form MainForm { get; set; }
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IProcess ProcessAbout { get; set; }
+
+        /// <summary>
+        /// Gets or sets the class that implements the new file process.
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IProcess ProcessNew { get; set; }
+
+        /// <summary>
+        /// Gets or sets the class that implements the open process.
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IProcess ProcessOpen { get; set; }
+
+        /// <summary>
+        /// Gets or sets the class that implements the play process.
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IProcess ProcessPlay { get; set; }
+
+        /// <summary>
+        /// Gets or sets the class that implements the record process.
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IProcess ProcessRecord { get; set; }
+
+        /// <summary>
+        /// Gets or sets the class that implements the save process.
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IProcess ProcessSave { get; set; }
+
+        /// <summary>
+        /// Gets or sets the class that implements the save process.
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IProcess ProcessSaveAs { get; set; }
+
+        /// <summary>
+        /// Gets or sets the class that implements the select all process.
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IProcess ProcessSelectAll { get; set; }
+
+        /// <summary>
+        /// Gets or sets the class that implements the update menus process.
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IProcess ProcessUpdateMenus { get; set; }
+
+        #endregion
+
+
+        #region Properties
+
+        
+
+        
 
         /// <summary>
         /// Gets or sets the AnimationManager to use with the controls on this applicationManager.
@@ -114,30 +231,39 @@ namespace KinectSkeleton
         public ActionManager ActionManager { get; set; }
 
         /// <summary>
-        /// Gets or sets the slider for actions to work with
-        /// </summary>
-        public SelectableSlider Slider { get; set; }
-
-        /// <summary>
-        /// Gets or sets the viewer for actions to work with.
-        /// </summary>
-        public SkeletonView Viewer { get; set; }
-
-        /// <summary>
-        /// Gets or sets the main menu for the application.
-        /// </summary>
-        public MenuStrip Menu { get; set; }
-
-        /// <summary>
         /// Gets or sets the play button.
         /// </summary>
+        [Category("Binding"), Description("Gets or sets the play button for the other components in the application to interact with.")]
         public Button ButtonPlay { get; set; }
 
         /// <summary>
         /// Gets or sets the record button.
         /// </summary>
+        [Category("Binding"), Description("Gets or sets the record button for the other components in the application to interact with.")]
         public Button ButtonRecord { get; set; }
 
+        /// <summary>
+        /// Gets or sets a boolean indicating whether or not the current animation has changed since it was opened.
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool Changed { get; set; }
+
+        /// <summary>
+        /// This doesn't require it to be the MainForm class from this application.
+        /// This can be any form that is set up to contain the project.
+        /// </summary>
+        [Category("Binding"), Description("Gets or sets the MainForm for the other components in the application to interact with.")]
+        public Form MainForm { get; set; }
+        
+        
+
+        /// <summary>
+        /// Gets or sets the main menu for the application.
+        /// </summary>
+        [Category("Binding"), Description("Gets or sets the main menu for the other components in the application to interact with.")]
+        public MenuStrip Menu { get; set; }
+
+        
         /// <summary>
         /// Gets or sets the RecentFileManager that can update the file menu.
         /// </summary>
@@ -145,14 +271,46 @@ namespace KinectSkeleton
         public RecentFileManager RecentFiles { get; set; }
 
         /// <summary>
-        /// Gets or sets the tool tip for this application.
+        /// Gets or sets whether or not this application is actively recording.  This should not be handled
+        /// directly in practice, and should only be toggled by the recording process that updates the GUI.
         /// </summary>
-        public ToolTip ToolTip { get; set; }
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        internal bool Recording
+        {
+            get
+            {
+                return _recording;
+            }
+            set
+            {
+                _recording = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the slider for actions to work with
+        /// </summary>
+        [Category("Binding"), Description("Gets or sets the selectable slider control for the other components in the application to interact with.")]
+        public SelectableSlider Slider { get; set; }
+
 
         /// <summary>
         /// Gets or sets the tool tip for this application
         /// </summary>
+        [Category("Binding"), Description("Gets or sets the slider context menu for the other components in the application to interact with.")]
         public SliderContextMenu SliderContextMenu { get; set; }
+
+        /// <summary>
+        /// Gets or sets the tool tip for this application.
+        /// </summary>
+        [Category("Binding"), Description("Gets or sets the help tool tip for the other components in the application to interact with.")]
+        public ToolTip ToolTip { get; set; }
+
+        /// <summary>
+        /// Gets or sets the viewer for actions to work with.
+        /// </summary>
+        [Category("Binding"), Description("Gets or sets the SkeletonViewer control for the other components in the application to interact with.")]
+        public SkeletonView Viewer { get; set; }
 
         #endregion
 

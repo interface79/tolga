@@ -33,7 +33,7 @@ namespace KinectSkeleton
     /// <summary>
     /// The ProcessNew class
     /// </summary>
-    public class ProcessNew
+    public class ProcessNew : IProcess
     {
 
         #region Methods
@@ -42,14 +42,38 @@ namespace KinectSkeleton
         /// This process clears any content currently in the animation manager
         /// </summary>
         /// <param name="app"></param>
-        public static void New(ApplicationManager app) {
+        public void Run(ApplicationManager app) {
             app.AnimationManager.CurrentAnimation = new SkeletonAnimation();
+            app.AnimationManager.CurrentSnapshot = null;
+            if (app.MainForm != null) { 
+                app.MainForm.Text = null;
+            }
             if (app.ButtonPlay != null) {
                 app.ButtonPlay.Enabled = false;
             }
             if (app.Slider != null) {
                 app.Slider.Enabled = false;
+                app.Slider.Selected = false;
+                app.Slider.Value = 0;
+                app.Slider.Refresh();
+                app.Slider.Invalidate();
             }
+            if (app.Viewer != null) {
+                app.Viewer.Clear();
+
+            }
+            
+           
+        }
+
+        /// <summary>
+        /// New is always enabled.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        public bool IsEnabled(ApplicationManager app)
+        {
+            return true;
         }
 
         #endregion

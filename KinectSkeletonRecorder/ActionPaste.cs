@@ -86,10 +86,11 @@ namespace KinectSkeleton
         /// </summary>
         public void Redo() {
             _app.AnimationManager.PasteFromClipboard(Start);
-            _app.Slider.SelectionStart = Start;
-            _app.Slider.SelectionEnd = Start + Count;
-            _app.Slider.Selected = true;
+            _app.Slider.Selected = false;
+            _app.Slider.Value = Start + Count;
             _app.Slider.Maximum = _app.AnimationManager.SnapshotCount;
+            _app.Changed = true;
+            _app.UpdateMenus();
         }
 
         /// <summary>
@@ -100,6 +101,8 @@ namespace KinectSkeleton
             _app.Slider.Maximum = _app.AnimationManager.SnapshotCount;
             _app.Slider.Selected = false;
             _app.Slider.Value = Start;
+            _app.Changed = true;
+            _app.UpdateMenus();
         }
 
         #endregion

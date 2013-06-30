@@ -19,7 +19,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * 
- * The initial version of this file was created on 6/29/2013 5:47:56 PM
+ * The initial version of this file was created on 6/30/2013 1:20:00 PM
  * 
  */
 using System;
@@ -31,27 +31,30 @@ using System.Threading.Tasks;
 namespace KinectSkeleton
 {
     /// <summary>
-    /// The ProcessAbout class
+    /// The IProcess interface enables alternate methods to be used to run processes
     /// </summary>
-    public class ProcessAbout : IProcess
+    public interface IProcess
     {
 
-        /// <summary>
-        /// Launches the About dialog.
-        /// </summary>
-        /// <param name="app"></param>
-        public void Run(ApplicationManager app) {
-            AboutDialog dialog = new AboutDialog();
-            dialog.ShowDialog(app.MainForm);
-        }
+        #region Methods
 
         /// <summary>
-        /// The about process is always enabled.
+        /// This method actually runs the process with no parameters.
         /// </summary>
         /// <param name="app"></param>
-        public bool IsEnabled(ApplicationManager app) {
-            return true;
-        }
+        void Run(ApplicationManager app);
+
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets whether or not this process should be enabled based on the current app settings.
+        /// </summary>
+        bool IsEnabled(ApplicationManager app);
+
+        #endregion
 
 
     }

@@ -85,7 +85,9 @@ namespace KinectSkeleton
             _app.Slider.Maximum = _app.AnimationManager.SnapshotCount;
             _app.Slider.Selected = false;
             _app.Slider.Value = Start;
-            _app.AnimationManager.UpdatePasteEnabled();
+            _app.Changed = true;
+            _app.UpdateMenus();
+            
         }
 
         public void Undo()
@@ -96,7 +98,8 @@ namespace KinectSkeleton
             _app.Slider.Selected = true;
             _app.Slider.SelectionStart = Start;
             _app.Slider.SelectionEnd = Start + Count;
-            _app.AnimationManager.UpdatePasteEnabled();
+            _app.Changed = true;
+            _app.UpdateMenus();
         }
 
         

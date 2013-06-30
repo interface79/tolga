@@ -84,6 +84,8 @@ namespace KinectSkeleton
             _app.Slider.Maximum = _app.AnimationManager.SnapshotCount;
             _app.Slider.Selected = false;
             _app.Slider.Value = Start;
+            _app.Changed = true;
+            _app.UpdateMenus();
         }
 
         /// <summary>
@@ -100,6 +102,8 @@ namespace KinectSkeleton
             _app.Slider.Selected = true;
             _app.Slider.SelectionStart = Start;
             _app.Slider.SelectionEnd = Start + Count;
+            _app.Changed = true;
+            _app.UpdateMenus();
         }
 
         #endregion

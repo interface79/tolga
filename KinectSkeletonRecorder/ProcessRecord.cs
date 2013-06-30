@@ -27,34 +27,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace KinectSkeleton
 {
     /// <summary>
     /// The ProcessRecord class
     /// </summary>
-    public class ProcessRecord
+    public class ProcessRecord : IProcess
     {
         #region Fields
 
-        private static bool _recording;
-
-
-        #endregion
-
-        #region Events
-
-        #endregion
-
-        #region Constructor
-
-
-        /// <summary>
-        /// Creates a new instance of the ProcessRecord class.
-        /// </summary>
-        public ProcessRecord()
-        {
-        }
+        
 
 
         #endregion
@@ -65,8 +49,8 @@ namespace KinectSkeleton
         /// This will either start recording or stop recording, depending on whether the application is actively recording.
         /// </summary>
         /// <param name="app"></param>
-        public static void ToggleRecord(ApplicationManager app) {
-            if (!_recording)
+        public void Run(ApplicationManager app) {
+            if (!app.Recording)
             {
                 //  .AnimationManager.Instance.CurrentAnimation = new SkeletonAnimation();
                 SkeletonKinectManager.Instance.Start();
@@ -78,7 +62,7 @@ namespace KinectSkeleton
                         app.ToolTip.SetToolTip(app.ButtonRecord, Messages.ProcessRecord_PressStop);
                     }
                 }
-                _recording = true;
+                app.Recording = true;
             }
             else
             {
@@ -101,18 +85,27 @@ namespace KinectSkeleton
                     app.Slider.Maximum = app.AnimationManager.CurrentAnimation.Snapshots.Count - 1;
                     app.Slider.Minimum = 0;
                 }
-                _recording = false;
+                ToolStripMenuItem menuSelect = app.GetMenu("menuSelectAll");
+                if (menuSelect != null)
+                {
+                    menuSelect.Enabled = (app.AnimationManager.CurrentAnimation.Snapshots.Count > 0);
+                }
+                app.Recording = false;
             }
             
         
         }
 
+        /// <summary>
+        /// Record is always enabled.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        public bool IsEnabled(ApplicationManager app) {
+            return true;
+        }
+
         #endregion
-
-        #region Properties
-
-        #endregion
-
 
     }
 }

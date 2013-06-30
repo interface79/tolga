@@ -33,7 +33,7 @@ namespace KinectSkeleton
     /// <summary>
     /// The ProcessPlay class
     /// </summary>
-    public class ProcessPlay
+    public class ProcessPlay : IProcess
     {
         
 
@@ -44,7 +44,7 @@ namespace KinectSkeleton
         /// If the various buttons are being used, then this will toggle the play button configuration.
         /// </summary>
         /// <param name="app"></param>
-        public static void TogglePlay(ApplicationManager app) {
+        public void Run(ApplicationManager app) {
             if (!app.AnimationManager.Playing)
             {
                 app.AnimationManager.Start();
@@ -69,6 +69,15 @@ namespace KinectSkeleton
                 }
             }
         
+        }
+
+
+        public bool IsEnabled(ApplicationManager app) {
+            if (app.AnimationManager != null && app.AnimationManager.CurrentAnimation != null && app.AnimationManager.CurrentAnimation.Snapshots != null
+                && app.AnimationManager.CurrentAnimation.Snapshots.Count > 0) {
+                    return true;
+            }
+            return false;
         }
 
         #endregion

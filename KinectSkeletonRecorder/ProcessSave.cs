@@ -30,14 +30,14 @@ using System.Windows.Forms;
 
 namespace KinectSkeleton
 {
-    public class ProcessSave
+    public class ProcessSave : IProcess
     {
 
         /// <summary>
         /// This process invokes the save method.
         /// </summary>
         /// <param name="app"></param>
-        public static void Save(ApplicationManager app)
+        public void Run(ApplicationManager app)
         {
             SkeletonAnimation animation = app.AnimationManager.CurrentAnimation;
             if (animation == null || animation.Snapshots.Count == 0)
@@ -45,25 +45,50 @@ namespace KinectSkeleton
                 MessageBox.Show(Messages.ProcessSave_NoRecording);
                 return;
             }
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = Messages.Animation_Files_Filter + "|*.xml";
-            DialogResult r = sfd.ShowDialog(app.MainForm);
-            if (r != System.Windows.Forms.DialogResult.OK)
+            if (animation.Filename == null) {
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = Messages.Animation_Files_Filter + "|*.xml";
+                DialogResult r = sfd.ShowDialog(app.MainForm);
+                if (r != System.Windows.Forms.DialogResult.OK)
+                {
+                    return;
+                }
+                animation.Filename = sfd.FileName;
+                
+            }
+
+            animation.Name = Path.GetFileNameWithoutExtension(animation.Filename);
+            if (app.MainForm != null)
             {
-                return;
+                app.MainForm.Text = animation.Name;
             }
-            if (string.IsNullOrEmpty(animation.Name)) {
-                animation.Name = Path.GetFileNameWithoutExtension(sfd.FileName);
-            }
-            animation.Save(sfd.FileName);
+            animation.Save();
             if (app.AnimationManager.CurrentAnimation != null)
             {
                 app.MainForm.Text = app.AnimationManager.CurrentAnimation.Name;
             }
             if (app.RecentFiles != null)
             {
-                app.RecentFiles.Add(sfd.FileName);
+                if (app.RecentFiles.Items[0] == animation.Filename) {
+                    app.RecentFiles.Add(animation.Filename);
+                }
+                
             }
+            app.Changed = false;
+            app.UpdateMenus();
         }
+
+        /// <summary>
+        /// Gets whether or not save is enabled by determining if the application has changed.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <returns></returns>
+        public bool IsEnabled(ApplicationManager app) {
+            return app.Changed;
+        }
+
+        
+
+       
     }
 }

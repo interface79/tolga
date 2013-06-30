@@ -105,11 +105,11 @@ namespace KinectSkeleton
         /// Serializes the entire animation into the specified filename.
         /// </summary>
         /// <param name="filename">The string filename to save the animation to.</param>
-        public void Save(string filename) {
+        public void Save() {
             XmlSerializer x = new XmlSerializer(typeof(SkeletonAnimation));
             XmlWriterSettings set = new XmlWriterSettings();
             set.Indent = true;
-            XmlWriter writer = XmlWriter.Create(new StreamWriter(filename), set);
+            XmlWriter writer = XmlWriter.Create(new StreamWriter(this.Filename), set);
             x.Serialize(writer, this);
         }
 

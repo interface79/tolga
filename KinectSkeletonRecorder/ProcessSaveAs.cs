@@ -19,7 +19,7 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * 
- * The initial version of this file was created on 6/29/2013 5:47:56 PM
+ * The initial version of this file was created on 6/30/2013 3:02:31 PM
  * 
  */
 using System;
@@ -31,28 +31,60 @@ using System.Threading.Tasks;
 namespace KinectSkeleton
 {
     /// <summary>
-    /// The ProcessAbout class
+    /// The SaveAs class
     /// </summary>
-    public class ProcessAbout : IProcess
+    public class ProcessSaveAs : IProcess
     {
+        #region Fields
+        private ProcessSave _save = new ProcessSave();
+
+        #endregion
+
+        #region Events
+
+        #endregion
+
+        #region Constructor
+
 
         /// <summary>
-        /// Launches the About dialog.
+        /// Creates a new instance of the SaveAs class.
         /// </summary>
-        /// <param name="app"></param>
-        public void Run(ApplicationManager app) {
-            AboutDialog dialog = new AboutDialog();
-            dialog.ShowDialog(app.MainForm);
-        }
-
-        /// <summary>
-        /// The about process is always enabled.
-        /// </summary>
-        /// <param name="app"></param>
-        public bool IsEnabled(ApplicationManager app) {
-            return true;
+        public ProcessSaveAs()
+        {
+            _save = new ProcessSave();
         }
 
 
+        #endregion
+
+        #region Methods
+
+        #endregion
+
+        #region Properties
+
+        #endregion
+
+
+
+        public void Run(ApplicationManager app)
+        {
+            if (app.AnimationManager != null)
+            {
+                if (app.AnimationManager.CurrentAnimation != null)
+                {
+                    app.AnimationManager.CurrentAnimation.Filename = null;
+                }
+            }
+            // SaveAs is always enabled.
+            _save.Run(app);
+        }
+
+        public bool IsEnabled(ApplicationManager app)
+        {
+            return (app.AnimationManager != null && app.AnimationManager.CurrentAnimation != null && app.AnimationManager.CurrentAnimation.Snapshots != null &&
+                app.AnimationManager.CurrentAnimation.Snapshots.Count > 0);
+        }
     }
 }
