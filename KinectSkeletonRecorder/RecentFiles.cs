@@ -24,6 +24,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -79,6 +80,19 @@ namespace KinectSkeleton
         /// </summary>
         /// <param name="file"></param>
         public void Add(string file) {
+            
+            // remove duplicates already in the list.
+            if (Items != null) {
+                for (int i = Items.Count-1; i >= 0; i--)
+                {
+                    if (Items[i] == file)
+                    {
+                        Items.RemoveAt(i);
+                    }
+                }
+            }
+            
+
             Items.Insert(0, file);
             UpdateMenu();
             Save();
@@ -117,12 +131,38 @@ namespace KinectSkeleton
                     menuRecent.DropDownItems.Clear();
                     for (int i = 0; i < count; i++)
                     {
-                        menuRecent.DropDownItems.Add(Items[i]);
+                        menuRecent.DropDownItems.Add(Items[i], null,File_Click);
                     };
                 }
                 
             }
             
+        }
+
+        public void File_Click(object sender, EventArgs e) { 
+            ToolStripMenuItem menuRecent = sender as ToolStripMenuItem;
+            if(menuRecent != null){
+                string name = menuRecent.Text;
+                if (File.Exists(name))
+                {
+                    Properties.Settings.Default.RecentFile = name;
+                    Properties.Settings.Default.Save();
+                    _app.ProcessRecentFile.Run(_app);
+                }
+                else
+                {
+                    DialogResult res = MessageBox.Show("This file did not exist.  Did you wish to remove it from this list?", "File not found", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    if (res == DialogResult.Yes) {
+                        for (int i = Items.Count - 1; i >= 0; i--) {
+                            if (Items[i] == name) {
+                                Items.RemoveAt(i);
+                            }
+                        }
+                    }
+                    this.Save();
+                }
+            }
+          
         }
 
         #endregion

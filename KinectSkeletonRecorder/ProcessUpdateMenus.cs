@@ -137,13 +137,13 @@ namespace KinectSkeleton
                 ToolStripMenuItem menuUndo = app.GetMenu("menuUndo");
                 if (menuUndo != null)
                 {
-                    menuUndo.Enabled = (app.ActionManager.Actions != null && app.ActionManager.Actions.Count > 0 && app.ActionManager.CurrentIndex > 0);
+                    menuUndo.Enabled = (app.ActionManager.Actions != null && app.ActionManager.Actions.Count > 0 && app.ActionManager.CurrentIndex >= 0);
                 }
 
                 ToolStripMenuItem menuRedo = app.GetMenu("menuRedo");
                 if (menuRedo != null)
                 {
-                    menuRedo.Enabled = (app.ActionManager.CurrentIndex < app.ActionManager.Actions.Count - 1);
+                    menuRedo.Enabled = (app.ActionManager.Actions != null && app.ActionManager.Actions.Count > 0 && (app.ActionManager.CurrentIndex < app.ActionManager.Actions.Count - 1));
                 }
             }
         }

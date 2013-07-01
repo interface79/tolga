@@ -63,6 +63,7 @@ namespace KinectSkeleton
             ProcessSaveAs = new ProcessSaveAs();
             ProcessSelectAll = new ProcessSelectAll();
             ProcessUpdateMenus = new ProcessUpdateMenus();
+            ProcessRecentFile = new ProcessRecentFile();
         }
 
         #region Methods
@@ -96,7 +97,7 @@ namespace KinectSkeleton
         }
 
         public void SelectAll() {
-            Run(ProcessSave);
+            Run(ProcessSelectAll);
         }
 
         public void UpdateMenus() {
@@ -112,6 +113,8 @@ namespace KinectSkeleton
             }
             
         }
+
+        
 
         /// <summary>
         /// Gets the ToolStripMenuItem that matches the specified name.  This searches
@@ -160,6 +163,12 @@ namespace KinectSkeleton
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public IProcess ProcessAbout { get; set; }
+
+        /// <summary>
+        /// Gets or sets the class that implements the about process.
+        /// </summary>
+        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public IProcess ProcessRecentFile { get; set; }
 
         /// <summary>
         /// Gets or sets the class that implements the new file process.

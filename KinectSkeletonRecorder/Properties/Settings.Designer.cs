@@ -34,5 +34,17 @@ namespace KinectSkeleton.Properties {
                 this["RecentFiles"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RecentFile {
+            get {
+                return ((string)(this["RecentFile"]));
+            }
+            set {
+                this["RecentFile"] = value;
+            }
+        }
     }
 }

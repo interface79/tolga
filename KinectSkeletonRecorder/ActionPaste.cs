@@ -74,7 +74,7 @@ namespace KinectSkeleton
             if (_app.Slider == null) {
                 return;
             }
-            //ActionManager.Instance.Add(this);
+            _app.ActionManager.Add(this);
             Start = _app.Slider.Value;
             Snapshots = _app.AnimationManager.ClipboardAnimation.Snapshots;
             Count = Snapshots.Count;

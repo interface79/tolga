@@ -88,6 +88,7 @@ namespace KinectSkeleton
 
             }
             app.Changed = false;
+            app.ActionManager.Actions.Clear();
             app.UpdateMenus();
 
         }

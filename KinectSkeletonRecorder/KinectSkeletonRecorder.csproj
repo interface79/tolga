@@ -25,7 +25,7 @@
     <InstallUrl>http://kinectskeletonrecorder.codeplex.com/releases/clickonce/</InstallUrl>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.0.4.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -126,6 +126,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ProcessSave.cs" />
+    <Compile Include="ProcessRecentFile.cs" />
     <Compile Include="RecentFiles.cs" />
     <Compile Include="ProcessSaveAs.cs" />
     <Compile Include="SelectableSlider.cs">

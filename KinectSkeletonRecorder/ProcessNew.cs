@@ -60,9 +60,9 @@ namespace KinectSkeleton
             }
             if (app.Viewer != null) {
                 app.Viewer.Clear();
-
+                
             }
-            
+            app.ActionManager.Actions.Clear();
            
         }
 
